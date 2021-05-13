@@ -9,7 +9,7 @@ export default function Home() {
     const [balls, setBalls] = useState([]);
 
     useEffect(() => {
-        const ref = db.ref('ranges');
+        const ref = db.ref('priceRanks');
 
         ref.on("value", (snapshot) => {
             const activeRange = Object.entries(snapshot.val()).find(([key, obj]) => obj.active && key);
@@ -33,8 +33,6 @@ export default function Home() {
         };
     }, [])
 
-    console.log(Object.values(balls));
-
     return (
         <div className={styles.container}>
 
@@ -44,8 +42,8 @@ export default function Home() {
             }
 
             <h1>Balls</h1>
-            { Object.values(balls).map((ball) => (
-                <p>{ball.value}</p>
+            { Object.keys(balls).map((key) => (
+                <p key={key}>{balls[key].value}</p>
             ))}
 
         </div>
