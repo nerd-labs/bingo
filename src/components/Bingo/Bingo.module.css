@@ -1,0 +1,51 @@
+.bingo {
+    --light: #FEE50C;
+    --dark: #E28504;
+    --size: 100px;
+    
+    appearance: none;
+    background-image: linear-gradient(var(--dark), var(--light));
+    border: calc(var(--size) * .04) solid var(--dark);
+    border-radius: calc(var(--size) / 2);
+    box-shadow: inset 0 0 0 calc(var(--size) * .04) var(--light);
+    color: white;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: calc(var(--size) * .6);
+    height: var(--size);
+    line-height: calc(var(--size) + (var(--size) / 10));
+    padding: 0 var(--size);
+    position: relative;
+    text-align: center;
+    text-shadow: 0 0 4px rgba(0, 0, 0, .5);
+}
+
+.bingo::after {
+    background-color: #fff;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: calc(var(--size) / 10);
+    opacity: .7;
+    position: absolute;
+    right: 10%;
+    top: 12%;
+    width: calc(var(--size) / 10);
+}
+
+.bingo::before {
+    background-color: #fff;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: calc(var(--size) / 6);
+    opacity: .7;
+    position: absolute;
+    right: 5%;
+    top: 30%;
+    width: calc(var(--size) / 6);
+}
+
+.bingo:hover {
+    background-image: linear-gradient(var(--light), var(--dark));
+}

@@ -2,6 +2,10 @@ import styles from '../styles/Home.module.css'
 import {useEffect, useState} from 'react';
 import { firebase } from '../src/initFirebase';
 
+import Balls from '../src/components/Balls';
+import Bingo from '../src/components/Bingo';
+import Grid from '../src/components/Grid';
+
 const db = firebase.database();
 
 export default function Home() {
@@ -13,7 +17,7 @@ export default function Home() {
 
         ref.on("value", (snapshot) => {
             const activeRange = Object.entries(snapshot.val()).find(([key, obj]) => obj.active && key);
-            setRange(activeRange ? activeRange[0] : null);
+            setRange(activeRange ? activeRange[1] : null);
         });
 
         return () => {
@@ -34,19 +38,22 @@ export default function Home() {
     }, [])
 
     return (
-        <div className={styles.container}>
-
-            { !range 
-                ? <p>No active range is set</p>
-                : <p>Active range {range}</p>
-            }
-
-            <h1>Balls</h1>
-            { Object.keys(balls).map((key) => (
-                <p key={key}>{balls[key].value}</p>
-            ))}
-
-        </div>
+        <>
+            <div className={styles.page}>
+                <div className={styles.grid}>
+                    <Grid title={range ? range.name : 'No active game'} />
+                </div>
+                <div className={styles.balls}>
+                    <Balls balls={balls} />
+                </div>
+                <div className={styles.logo}>
+                    logo
+                </div>
+                <div className={styles.bingo}>
+                    <Bingo />
+                </div>
+            </div>
+        </>
     )
 }
 

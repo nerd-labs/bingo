@@ -1,0 +1,65 @@
+.outer {
+  animation-name: fadeIn;
+  animation-delay: var(--delay);
+  animation-duration: 1s;
+  animation-fill-mode: backwards;
+  background-image: linear-gradient(green, lightgreen, green);
+  border-radius: 20px;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 30px;
+  height: var(--square-size);
+  padding: 4px;
+  position: relative;
+  text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+  transition-property: transform;
+  transition-duration: 200ms;
+  width: var(--square-size);
+}
+
+.outer:hover {
+  box-shadow: 0 0 30px 30px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transform: scale(1.3);
+  z-index: 1;
+}
+
+.inner {
+  align-items: center;
+  background-image: radial-gradient(lightgreen, darkgreen);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.big {
+  background-image: linear-gradient(purple, pink, purple);
+}
+
+.big .inner {
+  background-image: radial-gradient(pink, rebeccapurple);
+}
+
+.bigText {
+  bottom: 10px;
+  font-size: 22px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
