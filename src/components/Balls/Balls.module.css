@@ -48,7 +48,7 @@
     background-image: linear-gradient(var(--color-orange), var(--color-yellow));
     border-radius: 50%;
     box-shadow: 0 2px var(--color-orange);
-    color: white;
+    color: var(--color-white);
     cursor: default;
     height: 40px;
     line-height: 45px;
