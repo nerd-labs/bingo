@@ -2,6 +2,11 @@
 
 :root {
     --square-size: 140px;
+    
+    --color-orange: #E28504;
+    --color-yellow: #FEE50C;
+    --color-red: #C13035;
+    --color-bordeaux: #841918;
 }
 
 html,
@@ -23,7 +28,7 @@ a {
 
 
 body {
-    background-image: radial-gradient(#C13035, #841918);
+    background-image: radial-gradient(var(--color-red), var(--color-bordeaux));
     background-size: cover;
     background-repeat: no-repeat;
 }

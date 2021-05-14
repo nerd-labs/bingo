@@ -6,7 +6,7 @@
   background-image: linear-gradient(green, lightgreen, green);
   border-radius: 20px;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
-  color: #fff;
+  color: var(--color-white);
   font-size: 30px;
   height: var(--square-size);
   padding: 4px;
