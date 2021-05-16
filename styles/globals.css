@@ -23,6 +23,10 @@ a {
     text-decoration: none;
 }
 
+input {
+    font-family: 'Luckiest Guy', cursive;
+}
+
 * {
     box-sizing: border-box;
 }

@@ -2,13 +2,14 @@
     display: grid;
     grid-gap: 10px;
     grid-template-areas: 
+        "fam fam fam"
         "grid balls logo"
         "grid balls bingo";
     grid-template-columns: auto 66px 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: 100px 1fr 1fr;
     margin: 0 auto; 
     max-width: 1200px;
-    padding-top: 100px;
+    /* padding-top: 100px; */
 }
 
 .grid {
@@ -25,4 +26,16 @@
 
 .bingo {
     grid-area: bingo;
+}
+
+.fam {
+    grid-area: fam;
+    display: flex;
+    color: var(--color-white);
+    text-align: center;
+    margin-bottom: 30px;
+
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 3px 3px rgb(0 0 0 / 30%);
 }

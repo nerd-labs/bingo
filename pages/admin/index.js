@@ -5,12 +5,15 @@ import { firebase } from '../../src/initFirebase';
 
 const db = firebase.database();
 
-export default function PriceRank() {
-    const [value, setValue] = useState();
-    const [ballValue, setBallValue] = useState();
+export default function Admin() {
+    const [value, setValue] = useState('');
+    const [ballValue, setBallValue] = useState('');
     const [priceRanks, setPriceRanks] = useState();
+    const [users, setUsers] = useState();
+    const [balls, setBalls] = useState();
 
     const priceRanksRef = useRef(db.ref('priceRanks'));
+    const usersRef = useRef(db.ref('users'));
     const ballsRef = useRef(db.ref('balls'));
 
     useEffect(() => {
@@ -20,6 +23,26 @@ export default function PriceRank() {
 
         return () => {
             priceRanksRef.current.off();
+        };
+    }, [])
+
+    useEffect(() => {
+        usersRef.current.on("value", (snapshot) => {
+            setUsers(snapshot.val());
+        });
+
+        return () => {
+            usersRef.current.off();
+        };
+    }, [])
+    
+    useEffect(() => {
+        ballsRef.current.on("value", (snapshot) => {
+            setBalls(snapshot.val());
+        });
+
+        return () => {
+            ballsRef.current.off();
         };
     }, [])
 
@@ -37,7 +60,7 @@ export default function PriceRank() {
                         active: false,
                     });
 
-                    setValue(null);
+                    setValue('');
                 }}>
                     <input className={styles.input} name="rank" value={value} onChange={(e) => setValue(e.target.value)} />
 
@@ -65,6 +88,10 @@ export default function PriceRank() {
                                                         active: k === e.target.value 
                                                     });
                                             });
+
+                                            ballsRef.current.remove()
+                                                .then(() => console.log('removed'))
+                                                .catch((e) => console.log('error', e));
                                         }}
                                     /> 
                                     {priceRanks[key].name}
@@ -87,13 +114,45 @@ export default function PriceRank() {
                         value: ballValue,
                     });
 
-                    setBallValue(null)
+                    setBallValue('')
                 }}>
                     <input className={styles.input} name="range" value={ballValue} onChange={(e) => setBallValue(e.target.value)} />
 
                     <button type="submit" className={styles.button}>Add new ball</button>
                 </form>
             </div>
+
+            { balls && (
+                <div className={styles.formBlock}>
+                    <h1 className={styles.title}>Balls</h1>
+
+                    <div>
+                        {
+                            Object.keys(balls).map((key) => (
+                                <div key={key}>
+                                    {balls[key].value}
+                                </div>
+                            ))
+                        }
+                    </div> 
+                </div>
+            )}
+
+            { users && (
+                <div className={styles.formBlock}>
+                    <h1 className={styles.title}>Online users</h1>
+
+                    <div>
+                        {
+                            Object.keys(users)?.map((key) => (
+                                <div key={key}>
+                                    {users[key].name}
+                                </div>
+                            ))
+                        }
+                    </div> 
+                </div>
+            )}
         </main>
     );
 }

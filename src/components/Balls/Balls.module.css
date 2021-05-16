@@ -45,6 +45,7 @@
 }
 
 .ball {
+    animation: popIn 200ms linear both;
     background-image: linear-gradient(var(--color-orange), var(--color-yellow));
     border-radius: 50%;
     box-shadow: 0 2px var(--color-orange);
@@ -57,4 +58,18 @@
     text-shadow: 0 0 4px rgba(0, 0, 0, .5);
     user-select: none;
     width: 40px;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
