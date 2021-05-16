@@ -5,6 +5,7 @@ import { firebase } from '../src/initFirebase';
 
 import Balls from '../src/components/Balls';
 import Button from '../src/components/Button';
+import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
 
 const db = firebase.database();
@@ -81,6 +82,9 @@ export default function Home() {
                 </div>
                 <div className={styles.bingo}>
                     <Button text='BINGO' />
+                </div>
+                <div className={styles.extraPrice}>
+                    <ExtraPrice />
                 </div>
             </div>
         </>
