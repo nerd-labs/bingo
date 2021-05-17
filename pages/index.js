@@ -1,5 +1,5 @@
 import styles from '../styles/Home.module.css'
-import {useEffect, useState, useRef} from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
@@ -7,6 +7,7 @@ import Balls from '../src/components/Balls';
 import Button from '../src/components/Button';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
+import Shape, { SHAPES } from '../src/components/Shape';
 
 const db = firebase.database();
 
@@ -52,7 +53,7 @@ export default function Home() {
 
             setUser(value);
         }
-        
+
         getIp();
     }, []);
 
@@ -96,7 +97,16 @@ export default function Home() {
                     { hasBingo && <h1>BINGO!!!!</h1> }
                 </div>
                 <div className={styles.bingo}>
-                    <Button text='BINGO' onClick={() => bingo() } />
+                    <div className={styles.bingoWrapper}>
+                        <div className={styles.shapes}>
+                            <Shape shape={SHAPES.LOGO} />
+                            <Shape shape={SHAPES.E} />
+                            <Shape shape={SHAPES.U} />
+                            <Shape shape={SHAPES.R} />
+                            <Shape shape={SHAPES.I} />
+                        </div>
+                        <Button text='BINGO' onClick={() => bingo() } />
+                    </div>
                 </div>
                 <div className={styles.extraPrice}>
                     <ExtraPrice />
