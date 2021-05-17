@@ -38,12 +38,10 @@ export default function Home() {
 
     useEffect(() => {
         async function getIp() {
-            console.log('userid', userId);
             const us = db.ref(`users/${userId}`);
             const snapshot = await us.once('value');
             const value = snapshot.val();
 
-            console.log('index', value);
 
             if (!value) {
                 router.push('/welcome');
@@ -115,4 +113,3 @@ export default function Home() {
         </>
     )
 }
-
