@@ -1,0 +1,34 @@
+.shape {
+    align-items: center;
+    background-image: linear-gradient(green, #26a226);
+    border-radius: 10px;
+    border: 2px solid green;
+    box-shadow: inset 0 0 0 2px #26a226;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+    height: 80px;
+    justify-items: center;
+    padding: 5px;
+    transition-property: transform;
+    transition-duration: 200ms;
+    width: 80px;
+}
+
+.shape:hover {
+    background-image: linear-gradient(#26a226, green);
+}
+
+.bullet {
+    background-color: white;
+    border-radius: 50%;
+    height: 70%;
+    opacity: 0;
+    width: 70%;
+}
+
+.active {
+    box-shadow: 0 0 3px rgba(0, 0, 0, .1);
+    opacity: 1;
+}
