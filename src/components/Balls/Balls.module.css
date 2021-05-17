@@ -65,7 +65,7 @@
     text-shadow: 0 0 4px rgba(0, 0, 0, .5);
     user-select: none;
     width: 40px;
-    transition: all 500ms linear;
+    transition: top 500ms linear;
     position: absolute;
     top: var(--top);
 }

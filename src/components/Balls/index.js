@@ -26,11 +26,6 @@ export default function Balls() {
         }
     }, []);
 
-    useEffect(() => {
-        console.log(innerRef.current.scrollHeight);
-        innerRef.current.scrollTop = 0; //innerRef.current.scrollHeight;
-    }, [balls]);
-
     return (
         <div className={styles.balls}>
             <div className={styles.ballsInner} ref={innerRef}>
