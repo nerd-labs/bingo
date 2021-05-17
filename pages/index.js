@@ -107,7 +107,6 @@ export default function Home() {
                     { hasBingo && <h1>BINGO!!!!</h1> }
                 </div>
                 <div className={styles.bingo}>
-<<<<<<< HEAD
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
                             <Shape shape={SHAPES.LOGO} />
@@ -116,11 +115,8 @@ export default function Home() {
                             <Shape shape={SHAPES.R} />
                             <Shape shape={SHAPES.I} />
                         </div>
-                        <Button text='BINGO' />
+                        <Button text='BINGO' onClick={() => bingo() } />
                     </div>
-=======
-                    <Button text='BINGO' onClick={() => bingo() } />
->>>>>>> origin/main
                 </div>
                 <div className={styles.extraPrice}>
                     <ExtraPrice />
