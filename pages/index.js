@@ -15,23 +15,41 @@ export default function Home() {
     const router = useRouter()
     const [range, setRange] = useState();
     const [balls, setBalls] = useState([]);
+    const [hasBingo, setHasBingo] = useState(false);
     const [user, setUser] = useState();
+
+    const usersRef = useRef(db.ref('users'));
+    const bingoRef = useRef(db.ref('bingo'));
+
+    const [userId] = useState(() => {
+        if (typeof window !== "undefined") {
+            return localStorage.getItem('bingo.euri.com');
+        }
+    });
+
+    useEffect(() => {
+        bingoRef.current.on('child_added', () => {
+            setHasBingo(true);
+        });
+
+        return () => {
+            bingoRef.current.off();
+        };
+    }, [])
 
     useEffect(() => {
         async function getIp() {
-            const response = await fetch('https://api.ipify.org/?format=json');
-            const { ip } = await response.json();
+            const us = db.ref(`users/${userId}`);
+            const snapshot = await us.once('value');
+            const value = snapshot.val();
 
-            db.ref('users').orderByChild('ip').equalTo(ip).on('value', (snapshot) => {
-                const user = snapshot.val();
 
-                if (!user) {
-                    router.push('welcome');
-                    return;
-                }
+            if (!value) {
+                router.push('/welcome');
+                return;
+            }
 
-                setUser(Object.values(user)[0]);
-            });
+            setUser(value);
         }
 
         getIp();
@@ -62,6 +80,16 @@ export default function Home() {
         };
     }, [])
 
+    function bingo() {
+        const newBingo = bingoRef.current.push();
+        newBingo.set({
+            userId: userId,
+            name: user.name,
+            bingo: Date.now(),
+            key: newBingo.key,
+        });
+    }
+
     if (!user) return null;
 
     return (
@@ -76,8 +104,10 @@ export default function Home() {
                 </div>
                 <div className={styles.logo}>
                     logo
+                    { hasBingo && <h1>BINGO!!!!</h1> }
                 </div>
                 <div className={styles.bingo}>
+<<<<<<< HEAD
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
                             <Shape shape={SHAPES.LOGO} />
@@ -88,6 +118,9 @@ export default function Home() {
                         </div>
                         <Button text='BINGO' />
                     </div>
+=======
+                    <Button text='BINGO' onClick={() => bingo() } />
+>>>>>>> origin/main
                 </div>
                 <div className={styles.extraPrice}>
                     <ExtraPrice />
@@ -96,4 +129,3 @@ export default function Home() {
         </>
     )
 }
-
