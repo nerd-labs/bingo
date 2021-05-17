@@ -22,7 +22,6 @@ function Welcome() {
                 const us = snapshot.val();
 
                 if (!us) {
-                    router.push('welcome');
                     return;
                 }
 
@@ -34,7 +33,6 @@ function Welcome() {
     }, []);
 
     useEffect(() => {
-        console.log({ user, name });
         if (user && !name) setName(Object.values(user)[0].name);
     }, [user]);
 
@@ -45,7 +43,6 @@ function Welcome() {
         const { ip } = await response.json();
 
         if (user) {
-            console.log(Object.keys(user)[0])
             db.ref(`users/${Object.keys(user)[0]}`).set({ name, ip });
         } else {
             const usersRef = db.ref('users');

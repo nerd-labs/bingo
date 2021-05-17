@@ -89,9 +89,7 @@ export default function Admin() {
                                                     });
                                             });
 
-                                            ballsRef.current.remove()
-                                                .then(() => console.log('removed'))
-                                                .catch((e) => console.log('error', e));
+                                            ballsRef.current.remove();
                                         }}
                                     /> 
                                     {priceRanks[key].name}

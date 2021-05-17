@@ -16,8 +16,6 @@ export default function Home() {
     const [balls, setBalls] = useState([]);
     const [user, setUser] = useState();
 
-    const initNewGame = useRef(true);
-
     useEffect(() => {
         async function getIp() {
             const response = await fetch('https://api.ipify.org/?format=json');
@@ -44,8 +42,6 @@ export default function Home() {
         ref.on("value", (snapshot) => {
             const activeRange = Object.entries(snapshot.val()).find(([key, obj]) => obj.active && key);
             setRange(activeRange ? activeRange[1] : null);
-
-            initNewGame.current = true;
         });
 
         return () => {
