@@ -10,47 +10,48 @@ const db = firebase.database();
 
 function Welcome() {
     const router = useRouter()
-    const [name, setName] = useState();
+    const [name, setName] = useState('');
     const [user, setUser] = useState('');
 
+    const [userId, setUserId] = useState(() => {
+        if (typeof window !== "undefined") {
+            return localStorage.getItem('bingo.euri.com');
+        }
+    });
+
     useEffect(() => {
-        async function getIp() {
-            const response = await fetch('https://api.ipify.org/?format=json');
-            const { ip } = await response.json();
+        async function getUser() {
+            const us = db.ref(`users/${userId}`);
+            const snapshot = await us.once('value');
+            const value = snapshot.val();
 
-            db.ref('users').orderByChild('ip').equalTo(ip).on('value', (snapshot) => {
-                const us = snapshot.val();
+            if (!value) {
+                return;
+            }
 
-                if (!us) {
-                    return;
-                }
-
-                setUser(us);
-            });
+            setUser(value);
         }
         
-        getIp();
+        getUser();
     }, []);
 
     useEffect(() => {
-        if (user && !name) setName(Object.values(user)[0].name);
+        if (user && !name) setName(user.name);
     }, [user]);
 
     async function addUser(e) {
         e.preventDefault();
 
-        const response = await fetch('https://api.ipify.org/?format=json');
-        const { ip } = await response.json();
-
         if (user) {
-            db.ref(`users/${Object.keys(user)[0]}`).set({ name, ip });
+            db.ref(`users/${userId}`).update({ name });
         } else {
             const usersRef = db.ref('users');
-
-            usersRef.push({
+            const newUser = usersRef.push({
                 name,
-                ip,
             });
+
+            localStorage.setItem('bingo.euri.com', newUser.key);
+            setUserId(newUser.key);
         }
 
         router.push('/');
