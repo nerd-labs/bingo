@@ -32,7 +32,7 @@
 }
 
 .label {
-    color: white;
+    color: var(--color-white);
     font-size: 40px;
     text-shadow: 0 3px 3px rgb(0 0 0 / 30%);
 }
