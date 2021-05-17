@@ -29,6 +29,10 @@ export default function Home() {
             setHasBingo(true);
         });
 
+        bingoRef.current.on('value', (snapshot) => {
+            if (!snapshot.val()) setHasBingo(false);
+        });
+
         return () => {
             bingoRef.current.off();
         };
