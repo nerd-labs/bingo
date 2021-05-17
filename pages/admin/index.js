@@ -117,6 +117,7 @@ export default function Admin() {
 
                     newBallRef.set({
                         value: ballValue,
+                        key: newBallRef.key,
                     });
 
                     setBallValue('')

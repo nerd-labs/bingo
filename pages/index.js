@@ -13,11 +13,9 @@ const db = firebase.database();
 export default function Home() {
     const router = useRouter()
     const [range, setRange] = useState();
-    const [balls, setBalls] = useState([]);
     const [hasBingo, setHasBingo] = useState(false);
     const [user, setUser] = useState();
 
-    const usersRef = useRef(db.ref('users'));
     const bingoRef = useRef(db.ref('bingo'));
 
     const [userId] = useState(() => {
@@ -29,6 +27,10 @@ export default function Home() {
     useEffect(() => {
         bingoRef.current.on('child_added', () => {
             setHasBingo(true);
+        });
+
+        bingoRef.current.on('value', (snapshot) => {
+            if (!snapshot.val()) setHasBingo(false);
         });
 
         return () => {
@@ -67,18 +69,6 @@ export default function Home() {
         };
     }, [])
 
-    useEffect(() => {
-        const ref = db.ref('balls');
-
-        ref.on("value", (snapshot) => {
-            setBalls(snapshot.val());
-        });
-
-        return () => {
-            ref.off();
-        };
-    }, [])
-
     function bingo() {
         const newBingo = bingoRef.current.push();
         newBingo.set({
@@ -99,7 +89,7 @@ export default function Home() {
                     <Grid title={range ? range.name : 'No active game'} />
                 </div>
                 <div className={styles.balls}>
-                    <Balls balls={balls} />
+                    <Balls />
                 </div>
                 <div className={styles.logo}>
                     logo
