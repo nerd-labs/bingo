@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
 import Balls from '../src/components/Balls';
+import AnimatedText from '../src/components/AnimatedText';
 import Button from '../src/components/Button';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
@@ -102,7 +103,8 @@ export default function Home() {
                     <Balls balls={balls} />
                 </div>
                 <div className={styles.logo}>
-                    logo
+                    <img src="/logo.png" className={styles.logoImage} alt="logo" />
+
                     { hasBingo && <h1>BINGO!!!!</h1> }
                 </div>
                 <div className={styles.bingo}>
@@ -112,6 +114,8 @@ export default function Home() {
                     <ExtraPrice />
                 </div>
             </div>
+
+            <AnimatedText className={styles.bingoAnimation} text="bingo" />
         </>
     )
 }
