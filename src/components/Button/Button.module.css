@@ -1,4 +1,4 @@
-.bingo {
+.button {
     --size: 100px;
     
     appearance: none;
@@ -16,9 +16,10 @@
     position: relative;
     text-align: center;
     text-shadow: 0 0 4px rgba(0, 0, 0, .5);
+    width: 100%;
 }
 
-.bingo::after {
+.button::after {
     background-color: var(--color-white);
     border-radius: 50%;
     content: '';
@@ -31,7 +32,7 @@
     width: calc(var(--size) / 10);
 }
 
-.bingo::before {
+.button::before {
     background-color: var(--color-white);
     border-radius: 50%;
     content: '';
@@ -44,6 +45,6 @@
     width: calc(var(--size) / 6);
 }
 
-.bingo:hover {
+.button:hover {
     background-image: linear-gradient(var(--color-yellow), var(--color-orange));
 }

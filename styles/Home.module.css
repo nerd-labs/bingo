@@ -2,13 +2,14 @@
     display: grid;
     grid-gap: 10px;
     grid-template-areas: 
+        "fam fam fam"
         "grid balls logo"
-        "grid balls bingo";
+        "grid balls bingo"
+        "grid balls extraPrice";
     grid-template-columns: auto 66px 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: 100px 1fr 1fr;
     margin: 0 auto; 
     max-width: 1200px;
-    padding-top: 100px;
 }
 
 .grid {
@@ -24,5 +25,22 @@
 }
 
 .bingo {
+    align-items: center;
+    display: flex;
     grid-area: bingo;
+}
+
+.fam {
+    align-items: center;
+    color: var(--color-white);
+    display: flex;
+    grid-area: fam;
+    justify-content: center;
+    margin-bottom: 30px;
+    text-align: center;
+    text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.extraPrice {
+    grid-area: extraPrice;
 }
