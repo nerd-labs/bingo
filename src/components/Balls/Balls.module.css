@@ -10,13 +10,18 @@
 }
 
 .ballsInner {
+    align-items: center;
     background-image: radial-gradient(var(--color-red), var(--color-bordeaux));
     border-bottom: 1px solid rgba(0, 0, 0, .3);
     border-radius: 23px;
     box-shadow: inset 0 0 8px rgba(0, 0, 0, .3);
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
+    position: relative;
     padding: 5px;
     height: 100%;
+    max-height: 820px;
     scrollbar-width: none;
     width: 100%;
 }
@@ -45,31 +50,32 @@
 }
 
 .ball {
-    animation: popIn 200ms linear both;
+    animation: popIn 500ms linear backwards;
     background-image: linear-gradient(var(--color-orange), var(--color-yellow));
     border-radius: 50%;
     box-shadow: 0 2px var(--color-orange);
     color: var(--color-white);
     cursor: default;
+    flex-shrink: 0;
     height: 40px;
     line-height: 45px;
     margin-bottom: 5px;
+    position: relative;
     text-align: center;
     text-shadow: 0 0 4px rgba(0, 0, 0, .5);
     user-select: none;
     width: 40px;
+    transition: all 500ms linear;
+    position: absolute;
+    top: var(--top);
 }
 
 @keyframes popIn {
     0% {
-        transform: scale(0);
-    }
-
-    40% {
-        transform: scale(1.5);
+        transform: translateY(-100px)
     }
 
     100% {
-        transform: scale(1);
+        transform: translateY(0);
     }
 }

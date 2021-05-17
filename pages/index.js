@@ -13,7 +13,6 @@ const db = firebase.database();
 export default function Home() {
     const router = useRouter()
     const [range, setRange] = useState();
-    const [balls, setBalls] = useState([]);
     const [user, setUser] = useState();
 
     useEffect(() => {
@@ -49,18 +48,6 @@ export default function Home() {
         };
     }, [])
 
-    useEffect(() => {
-        const ref = db.ref('balls');
-
-        ref.on("value", (snapshot) => {
-            setBalls(snapshot.val());
-        });
-
-        return () => {
-            ref.off();
-        };
-    }, [])
-
     if (!user) return null;
 
     return (
@@ -71,7 +58,7 @@ export default function Home() {
                     <Grid title={range ? range.name : 'No active game'} />
                 </div>
                 <div className={styles.balls}>
-                    <Balls balls={balls} />
+                    <Balls />
                 </div>
                 <div className={styles.logo}>
                     logo
