@@ -64,6 +64,15 @@ export default function Admin() {
         };
     }, [])
 
+    function accept() {
+        bingoRef.current.remove();
+    }
+
+    function decline(key) {
+        const bingoKey = db.ref(`bingo/${key}`);
+        bingoKey.remove();
+    }
+
     return (
         <main className={styles.admin}>
             { priceRanks && (
@@ -150,12 +159,14 @@ export default function Admin() {
                 </div>
             )}
 
-            { bingo && bingo.length && (
+            { bingo[0] && (
                 <div className={styles.formBlock}>
                     <h1 className={styles.title}>User with bingo</h1>
 
                     <div>
                         {bingo[0].name} { toDate(bingo[0].bingo) }
+                        <button onClick={() => accept()}>Accept</button>
+                        <button onClick={() => decline(bingo[0].key)}>Decline</button>
                     </div> 
                 </div>
             )}

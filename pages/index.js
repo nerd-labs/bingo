@@ -80,10 +80,12 @@ export default function Home() {
     }, [])
 
     function bingo() {
-        bingoRef.current.push({
+        const newBingo = bingoRef.current.push();
+        newBingo.set({
             userId: userId,
             name: user.name,
             bingo: Date.now(),
+            key: newBingo.key,
         });
     }
 
