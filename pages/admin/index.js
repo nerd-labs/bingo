@@ -11,10 +11,16 @@ export default function Admin() {
     const [priceRanks, setPriceRanks] = useState();
     const [users, setUsers] = useState();
     const [balls, setBalls] = useState();
+    const [bingo, setBingo] = useState([]);
 
     const priceRanksRef = useRef(db.ref('priceRanks'));
     const usersRef = useRef(db.ref('users'));
     const ballsRef = useRef(db.ref('balls'));
+    const bingoRef = useRef(db.ref('bingo'));
+
+    function toDate(timestamp) {
+        return new Date(timestamp).toLocaleString();
+    }
 
     useEffect(() => {
         priceRanksRef.current.on("value", (snapshot) => {
@@ -23,6 +29,18 @@ export default function Admin() {
 
         return () => {
             priceRanksRef.current.off();
+        };
+    }, [])
+
+    useEffect(() => {
+        bingoRef.current.on("value", (snapshot) => {
+            const value = snapshot.val();
+            if (value) setBingo(Object.values(value).sort((a, b) => a.bingo - b.bingo));
+            else setBingo([]);
+        });
+
+        return () => {
+            bingoRef.current.off();
         };
     }, [])
 
@@ -46,28 +64,17 @@ export default function Admin() {
         };
     }, [])
 
+    function accept() {
+        bingoRef.current.remove();
+    }
+
+    function decline(key) {
+        const bingoKey = db.ref(`bingo/${key}`);
+        bingoKey.remove();
+    }
+
     return (
         <main className={styles.admin}>
-            <div className={styles.formBlock}>
-                <h1 className={styles.title}>Add new price rank</h1>
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-
-                    const newPriceRankRef = priceRanksRef.current.push();
-
-                    newPriceRankRef.set({
-                        name: value,
-                        active: false,
-                    });
-
-                    setValue('');
-                }}>
-                    <input className={styles.input} name="rank" value={value} onChange={(e) => setValue(e.target.value)} />
-
-                    <button type="submit" className={styles.button}>Add new price rank</button>
-                </form>
-            </div>
-
             { priceRanks && (
                 <div className={styles.formBlock}>
                     <h1 className={styles.title}>Set active price rank</h1>
@@ -149,6 +156,18 @@ export default function Admin() {
                                 </div>
                             ))
                         }
+                    </div> 
+                </div>
+            )}
+
+            { bingo[0] && (
+                <div className={styles.formBlock}>
+                    <h1 className={styles.title}>User with bingo</h1>
+
+                    <div>
+                        {bingo[0].name} { toDate(bingo[0].bingo) }
+                        <button onClick={() => accept()}>Accept</button>
+                        <button onClick={() => decline(bingo[0].key)}>Decline</button>
                     </div> 
                 </div>
             )}
