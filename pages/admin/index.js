@@ -3,17 +3,21 @@ import React, {useState, useEffect, useRef} from 'react';
 import styles from '../../styles/Admin.module.css'
 import { firebase } from '../../src/initFirebase';
 
+import useConfig from '../../src/hooks/useConfig';
+
 const db = firebase.database();
 
 export default function Admin() {
-    const [value, setValue] = useState('');
     const [ballValue, setBallValue] = useState('');
     const [priceRanks, setPriceRanks] = useState();
     const [users, setUsers] = useState();
     const [balls, setBalls] = useState();
     const [bingo, setBingo] = useState([]);
+    // const [activeRank, setActiveRank] = useState();
 
-    const priceRanksRef = useRef(db.ref('priceRanks'));
+    const config = useConfig();
+
+    const ranksRef = useRef(db.ref('ranks'));
     const usersRef = useRef(db.ref('users'));
     const ballsRef = useRef(db.ref('balls'));
     const bingoRef = useRef(db.ref('bingo'));
@@ -23,12 +27,12 @@ export default function Admin() {
     }
 
     useEffect(() => {
-        priceRanksRef.current.on("value", (snapshot) => {
+        ranksRef.current.on("value", (snapshot) => {
             setPriceRanks(snapshot.val());
         });
 
         return () => {
-            priceRanksRef.current.off();
+            ranksRef.current.off();
         };
     }, [])
 
@@ -77,33 +81,36 @@ export default function Admin() {
         <main className={styles.admin}>
             { priceRanks && (
                 <div className={styles.formBlock}>
-                    <h1 className={styles.title}>Set active price rank</h1>
+                    <h1 className={styles.title}>Active price rank</h1>
 
-                    <form>
-                        {
-                            Object.keys(priceRanks)?.map((key) => (
-                                <label key={key}>
-                                    <input 
-                                        type="radio" 
-                                        checked={priceRanks[key].active}
-                                        value={key} 
-                                        name="price-rank" 
-                                        onChange={(e) => {
-                                            Object.keys(priceRanks).forEach((k) => {
-                                                priceRanksRef.current.child(k)
-                                                    .update({ 
-                                                        active: k === e.target.value 
-                                                    });
-                                            });
+                    <p>
+                    {config.activeRange && config.activeRange.label} 
+                    {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
+                    </p>
 
-                                            ballsRef.current.remove();
-                                        }}
-                                    /> 
-                                    {priceRanks[key].name}
-                                </label>
-                            ))
+                    { config.activeRange.rank < 4 && <button onClick={() => {
+
+                        const confirmmed = confirm("Ben je zeker?");
+                        if (!confirmmed) return;
+
+                        ballsRef.current.remove();
+
+                        if (config.activeRange.round < 3) {
+                            db.ref(`ranks/${config.activeRange.rank}`).update({
+                                round: config.activeRange.round + 1,
+                            });
+                        } else {
+                            db.ref(`ranks/${config.activeRange.rank}`).update({
+                                active: false,
+                            });
+
+                                db.ref(`ranks/${config.activeRange.rank + 1}`).update({
+                                    round: config.activeRange.rank === 3 ? false : 1,
+                                    active: true,
+                                });
                         }
-                    </form> 
+                    }}>Start new {config.activeRange.round < 3 ? 'round' : 'range'}</button>
+                    }
                 </div>
             )}
 
@@ -112,6 +119,11 @@ export default function Admin() {
                 <h1 className={styles.title}> Add new ball</h1>
                 <form onSubmit={(e) => {
                     e.preventDefault();
+
+                    if (balls && Object.values(balls).some(b => b.value === ballValue)) return alert(`De bal met nummer ${ballValue} is al reeds getrokken!`);
+
+                    const confirmmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
+                    if (!confirmmed) return;
 
                     const newBallRef = ballsRef.current.push();
 
@@ -122,7 +134,9 @@ export default function Admin() {
 
                     setBallValue('')
                 }}>
-                    <input className={styles.input} name="range" value={ballValue} onChange={(e) => setBallValue(e.target.value)} />
+                    <input className={styles.input} name="range" value={ballValue} onChange={(e) => {
+                        setBallValue(e.target.value)
+                    }} />
 
                     <button type="submit" className={styles.button}>Add new ball</button>
                 </form>

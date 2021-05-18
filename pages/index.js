@@ -63,11 +63,12 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        const ref = db.ref('priceRanks');
+        const ref = db.ref('ranks');
 
         ref.on("value", (snapshot) => {
-            const activeRange = Object.entries(snapshot.val()).find(([key, obj]) => obj.active && key);
-            setRange(activeRange ? activeRange[1] : null);
+            const activeRange = snapshot.val().find(obj => obj && obj.active);
+            console.log(activeRange);
+            setRange(activeRange || null);
         });
 
         return () => {
@@ -92,7 +93,7 @@ export default function Home() {
             <div className={styles.page}>
                 <h1 className={styles.fam}>Welkom: { user.name }</h1>
                 <div className={styles.grid}>
-                    <Grid title={range ? range.name : 'No active game'} />
+                    <Grid />
                 </div>
                 <div className={styles.balls}>
                     <Balls />

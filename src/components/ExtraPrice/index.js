@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import useConfig from '../../hooks/useConfig';
 
 import styles from './ExtraPrice.module.css';
 
 export default function ExtraPrice() {
-    const [range, setRange] = useState();
     const config = useConfig();
 
-    if (!config || !config.extraQuestion) return null;
+    if (!config || !config.levelConfig || !config.levelConfig.extraQuestion) return null;
 
     return (
         <div className={styles.grid}>
@@ -18,7 +17,7 @@ export default function ExtraPrice() {
                 </div>
             </div>
             <div className={styles.gridInner}>
-                { config.extraQuestion }
+                { config.levelConfig.extraQuestion }
             </div>
         </div>
     );
