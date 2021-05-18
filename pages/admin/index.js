@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+import classNames from 'classnames';
 
 import Shape from '../../src/components/Shape';
 
@@ -10,10 +11,13 @@ import useLogs from '../../src/hooks/useLogs';
 const db = firebase.database();
 
 export default function Admin() {
+    const MAX_RANKS = 4;
+    const MAX_ROUNDS = 3;
+
     const [ballValue, setBallValue] = useState('');
     const [priceRanks, setPriceRanks] = useState();
-    const [users, setUsers] = useState();
-    const [balls, setBalls] = useState();
+    const [users, setUsers] = useState([]);
+    const [balls, setBalls] = useState([]);
     const [bingo, setBingo] = useState([]);
     const [shapes, setShapes] = useState([]);
 
@@ -69,7 +73,8 @@ export default function Admin() {
 
     useEffect(() => {
         usersRef.current.on("value", (snapshot) => {
-            setUsers(snapshot.val());
+            const value = snapshot.val();
+            if (value) setUsers(Object.values(value));
         });
 
         return () => {
@@ -79,7 +84,8 @@ export default function Admin() {
 
     useEffect(() => {
         ballsRef.current.on("value", (snapshot) => {
-            setBalls(snapshot.val());
+            const value = snapshot.val();
+            if (value) setBalls(Object.values(value).sort((a, b) => a.value - b.value));
         });
 
         return () => {
@@ -97,13 +103,17 @@ export default function Admin() {
         };
     }, [])
 
-    function accept() {
+    function accept(bingo) {
         bingoRef.current.remove();
+
+        addLog(`Admin approved the bingo of ${bingo.name}!`);
     }
 
-    function decline(key) {
-        const bingoKey = db.ref(`bingo/${key}`);
+    function decline(bingo) {
+        const bingoKey = db.ref(`bingo/${bingo.key}`);
         bingoKey.remove();
+
+        addLog(`Admin declined the bingo of ${bingo.name}!`);
     }
 
     function shapeClicked(index) {
@@ -114,110 +124,68 @@ export default function Admin() {
         addLog(`Admin enabled shape ${index + 1}`);
     }
 
+    function submitNumber(e) {
+        e.preventDefault();
+
+        if (balls && Object.values(balls).some(b => b.value === ballValue)) {
+            return alert(`De bal met nummer ${ballValue} is al reeds getrokken!`);
+        }
+
+        const confirmmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
+        if (!confirmmed) return;
+
+        const newBallRef = ballsRef.current.push();
+        newBallRef.set({
+            value: ballValue,
+            key: newBallRef.key,
+        });
+
+        setBallValue('')
+    }
+
+    function changeActiveRound() {
+        const confirmmed = confirm("Ben je zeker?");
+        if (!confirmmed) return;
+
+        ballsRef.current.remove();
+        shapesRef.current.set([false, false, false, false, false]);
+
+        if (config.activeRange.round < 3) {
+            db.ref(`ranks/${config.activeRange.rank}`).update({
+                round: config.activeRange.round + 1,
+            });
+        } else {
+            db.ref(`ranks/${config.activeRange.rank}`).update({
+                active: false,
+            });
+
+            db.ref(`ranks/${config.activeRange.rank + 1}`).update({
+                round: config.activeRange.rank === 3 ? false : 1,
+                active: true,
+            });
+        }
+    }
+
     return (
         <main className={styles.admin}>
             <div className={styles.content}>
                 { priceRanks && (
-                    <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Active price rank</h1>
+                    <div className={classNames(styles.formBlock, styles.ranks)}>
+                        <h1 className={styles.title}>Actieve rang / ronde</h1>
 
-                        <p>
+                        <p className={styles.activeRound}>
                             {config.activeRange && config.activeRange.label} 
                             {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
                         </p>
 
-                        { config.activeRange.rank < 4 && <button className={styles.button} onClick={() => {
-                            const confirmmed = confirm("Ben je zeker?");
-                            if (!confirmmed) return;
-
-                            ballsRef.current.remove();
-                            shapesRef.current.set([false, false, false, false, false]);
-
-                            if (config.activeRange.round < 3) {
-                                db.ref(`ranks/${config.activeRange.rank}`).update({
-                                    round: config.activeRange.round + 1,
-                                });
-                            } else {
-                                db.ref(`ranks/${config.activeRange.rank}`).update({
-                                    active: false,
-                                });
-
-                                db.ref(`ranks/${config.activeRange.rank + 1}`).update({
-                                    round: config.activeRange.rank === 3 ? false : 1,
-                                    active: true,
-                                });
-                            }
-                        }}>Start nieuwe {config.activeRange.round < 3 ? 'ronde' : 'rang'}</button>
-                        }
-                    </div>
-                )}
-
-
-                <div className={styles.formBlock}>
-                    <h1 className={styles.title}>Voeg nieuw nummer toe</h1>
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-
-                        if (balls && Object.values(balls).some(b => b.value === ballValue)) return alert(`De bal met nummer ${ballValue} is al reeds getrokken!`);
-
-                        const confirmmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
-                        if (!confirmmed) return;
-
-                        const newBallRef = ballsRef.current.push();
-                        newBallRef.set({
-                            value: ballValue,
-                            key: newBallRef.key,
-                        });
-                        setBallValue('')
-                    }}>
-                        <input className={styles.input} name="range" value={ballValue} onChange={(e) => {
-                            setBallValue(e.target.value)
-                        }} />
-                        <button type="submit" className={styles.button}>Toevoegen</button>
-                    </form>
-                </div>
-
-                { balls && (
-                    <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Ballen</h1>
-
-                        <div>
-                            {
-                                Object.keys(balls).map((key) => (
-                                    <div key={key}>
-                                        {balls[key].value}
-                                    </div>
-                                ))
-                            }
-                        </div> 
-                    </div>
-                )}
-
-                { users && (
-                    <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Online families</h1>
-
-                        <div>
-                            {
-                                Object.keys(users)?.map((key) => (
-                                    <div key={key}>
-                                        {users[key].name}
-                                    </div>
-                                ))
-                            }
-                        </div> 
-                    </div>
-                )}
-
-                { bingo[0] && (
-                    <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Families met bingo</h1>
-
-                        <div>
-                            {bingo[0].name} { toDate(bingo[0].bingo) }
-                            <button className={styles.button} onClick={() => accept()}>Accepteer</button>
-                            <button className={styles.button} onClick={() => decline(bingo[0].key)}>Wijger</button>
-                        </div> 
+                        { config.activeRange.rank < MAX_RANKS && (
+                            <button 
+                                className={styles.button} 
+                                onClick={changeActiveRound}
+                            >
+                                Start nieuwe {config.activeRange.round < MAX_ROUNDS ? 'ronde' : 'rang'}
+                            </button>
+                        )}
                     </div>
                 )}
 
@@ -226,33 +194,82 @@ export default function Admin() {
                         <h1 className={styles.title}>Figuren</h1>
 
                         <div className={styles.shapes}>
-                            { config && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
+                            { config && config.activeRange && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
                                 <Shape key={i} shape={r} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>
                     </div>
                 )}
+
+                { bingo[0] && (
+                    <div className={styles.formBlock}>
+                        <h1 className={styles.title}>Families met bingo</h1>
+
+                        <div>
+                            <p> {bingo[0].name} - { toDate(bingo[0].bingo) }</p>
+                            <button className={styles.button} onClick={() => accept(bingo[0])}>Correct</button>
+                            <button className={classNames(styles.button, styles.buttonDecline)} onClick={() => decline(bingo[0])}>Foutief</button>
+                        </div> 
+                    </div>
+                )}
+            </div>
+
+            <div className={styles.balls}>
+                <div className={styles.formBlock}>
+                    <h1 className={styles.title}>Getrokken Ballen</h1>
+
+                    <form onSubmit={submitNumber}>
+                        <input 
+                            className={styles.input} 
+                            name="range" 
+                            value={ballValue} 
+                            onChange={(e) => setBallValue(e.target.value)} 
+                        />
+
+                        <button type="submit" className={styles.button}>Toevoegen</button>
+                    </form>
+
+                    <div className={styles.drawBalls}>
+                        {
+                            balls.map((ball) => (
+                                <div key={ball.key}>
+                                    {ball.value}
+                                </div>
+                            ))
+                        }
+                    </div> 
+                </div>
+            </div>
+
+            <div className={styles.users}>
+                <h1 className={styles.title}>Online families ({users.length})</h1>
+
+                <div className={styles.gridContent}>
+                    {
+                        users.map((user) => (
+                            <div key={user.key} className={styles.line}>
+                                {user.name}
+                            </div>
+                        ))
+                    }
+                </div> 
             </div>
 
             <div className={styles.logs}>
-                { logs && (
-                    <>
-                        <h1 className={styles.title}>Logs</h1>
+                <h1 className={styles.title}>Logs</h1>
 
-                        <div className={styles.logsContent}>
-                            {
-                                Object.keys(logs)?.map((key) => (
-                                    <div key={key} className={styles.logLine}>
-                                        <span className={styles.logTime}>
-                                            { getTime(logs[key].time) }
-                                        </span>
-                                        { logs[key].text }
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </>
-                )}
+                <div className={styles.gridContent}>
+                    {
+                        logs.map((log) => (
+                            <div key={log.key} className={styles.line}>
+                                <span className={styles.logTime}>
+                                    { getTime(log.time) }
+                                </span>
+                                { log.text }
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
         </main>
     );

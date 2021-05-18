@@ -83,6 +83,8 @@ export default function Home() {
             bingo: Date.now(),
             key: newBingo.key,
         });
+
+        addLog(`${user.name} clicked bingo!`);
     }
 
     function shapeClicked(index) {
@@ -111,7 +113,7 @@ export default function Home() {
                 <div className={styles.bingo}>
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
-                            { config && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
+                            { config && config.activeRange && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
                                 <Shape key={i} shape={r} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>

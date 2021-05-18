@@ -46,8 +46,11 @@ function Welcome() {
             db.ref(`users/${userId}`).update({ name });
         } else {
             const usersRef = db.ref('users');
-            const newUser = usersRef.push({
+            const newUser = usersRef.push();
+
+            newUser.set({
                 name,
+                key: newUser.key,
             });
 
             localStorage.setItem('bingo.euri.com', newUser.key);
