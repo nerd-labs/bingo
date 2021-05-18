@@ -99,11 +99,11 @@ export default function Home() {
                 <div className={styles.bingo}>
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
-                            <Shape shape={SHAPES.LOGO} />
-                            <Shape shape={SHAPES.E} />
+                            <Shape shape={SHAPES.S} />
                             <Shape shape={SHAPES.U} />
+                            <Shape shape={SHAPES.P} />
+                            <Shape shape={SHAPES.E} />
                             <Shape shape={SHAPES.R} />
-                            <Shape shape={SHAPES.I} />
                         </div>
                         <Button text='BINGO' onClick={() => bingo() } />
                     </div>

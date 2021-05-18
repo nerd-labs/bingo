@@ -28,6 +28,11 @@
     width: 70%;
 }
 
+.bullet:nth-child(13) {
+    background-color: rgba(255, 255, 255, .2) !important;
+    opacity: 1;
+}
+
 .active {
     box-shadow: 0 0 3px rgba(0, 0, 0, .1);
     opacity: 1;
