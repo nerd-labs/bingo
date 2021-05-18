@@ -61,7 +61,7 @@ const level1 = {
         },
         {
             name: 'Good Beer Spa - Gift card',
-            url: 'https://goodbeerspa.com/product-category/giftcards/',
+            url: 'https://goodbeerspa.com/shop/giftvoucher-for-a-beer-spa-session-for-2-people-in-1-jacuzzi/',
             big: true,
         },
         {
@@ -169,80 +169,84 @@ const level2 = {
     extraQuestion: 'Maak de langste worst met een potje Play-Doh.',
 };
 
+const level3 = {
+    prizes: [
+        {
+            name: 'Nintendo Switch',
+            big: true,
+            url: 'https://www.bol.com/nl/p/nintendo-switch-lite-console-grijs/9200000116374158',
+        },
+        {
+            name: 'Logitech Wireless Mouse',
+            url: 'https://www.logitech.com/en-us/products/mice/mx-master-3-mac-wireless-mouse.910-005693.html',
+        },
+        {
+            name: 'Disney+ jaarabonnement',
+            url: 'https://www.disneyplus.com/en-be',
+        },
+        {
+            name: 'Voetbaltruitje Rode Duivels',
+            url: 'https://shop.rbfa.be/match/home',
+        },
+        {
+            name: 'Pizza set',
+            url: 'https://www.bol.com/nl/p/tristar-pz-9154-pizza-festa-4-pizza-gourmetset/9200000131445037',
+        },
+        {
+            name: 'Nespresso Machine',
+            url: 'https://www.coolblue.be/nl/product/832739/magimix-nespresso-essenza-mini-zwart.html',
+        },
+        { 
+            name: 'Wijn abbonement',
+            url: 'https://ourdailybottle.com/pages/gifting',
+        }
+    ],
+    extraQuestion: 'Zet zoveel mogelijk wasknijpers op jullie gezicht',
+}
+
 const superJackpot = {
     prizes: [
         {
-            name: 'Scooter',
+            name: 'Green Egg BBQ',
             big: true,
-            url: '',
+            url: 'https://www.coolblue.be/nl/product/508616/big-green-egg-mini.html',
         },
         {
-            name: 'Nintendo switch lite',
-            big: true
+            name: 'PS5',
+            big: true,
+            url: 'https://www.coolblue.be/nl/product/865866/playstation-5.html',
         },
         {
-            name: 'Bitcoin',
-            big: true
+            name: 'Opblaasbare Jacuzzi',
+            big: true,
+            url: 'https://www.toppy.nl/product/14486/1177/spa/opblaasbare-jacuzzi/netspa-canyon-opblaasbare-jacuzzi-4-persoons.html',
         },
         {
-            name: 'Jacuzzi',
-            big: true
+            name: 'Airfryer',
+            url: 'https://www.coolblue.be/nl/product/882488/philips-airfryer-xl-hd9263-90.html',
         },
         {
-            name: 'Pokemon cards',
-            big: true
+            name: 'Alpacawandeling',
+            url: 'https://www.alpacaboerderij.be/activiteit/4/Korte-Alpacawandeling',
         },
         {
-            name: 'GoPro'
+            name: 'Bongobon: Glamping',
+            url: 'https://www.bongo.be/nl/cadeaubonnen/weekendje-weg-overnachten/glamping-884583.html',
+        },
+        { 
+            name: 'JBL Bluetooth speakers',
+            url: 'https://www.coolblue.be/nl/product/818429/jbl-charge-4-zwart.html',
         },
         {
-            name: 'Mouse'
+            name: 'Good Beer Spa - Gift card',
+            url: 'https://goodbeerspa.com/shop/giftvoucher-for-a-beer-spa-session-for-2-people-in-1-jacuzzi/',
         },
-        {
-            name: 'Airpods'
-        },
-        {
-            name: 'Phone'
-        },
-        {
-            name: 'iPad'
-        },
-        {
-            name: 'Arduino'
-        },
-        {
-            name: 'Netflix'
-        },
-        {
-            name: 'Disney+'
-        },
-        {
-            name: 'Board game'
-        },
-        {
-            name: 'Pencils'
-        },
-        {
-            name: 'Holiday'
-        },
-        {
-            name: 'Lego'
-        },
-        {
-            name: 'Wine'
-        },
-        {
-            name: 'BBQ'
-        },
-        {
-            name: 'Gin'
-        }
     ],
-    extraQuestion: '',
 };
 
 export default {
     level1,
     level2,
+    level3,
     superJackpot
 };
