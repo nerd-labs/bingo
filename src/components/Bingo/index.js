@@ -44,7 +44,6 @@ export default function Bingo() {
             );
             const nrOfYBulbs = Math.floor(clientHeight / (size + spacing));
 
-            console.log({ clientWidth, clientHeight, nrOfXBulbs, nrOfYBulbs });
 
             if (
                 (nrOfXBulbs === 0 || nrOfYBulbs === 0) &&
