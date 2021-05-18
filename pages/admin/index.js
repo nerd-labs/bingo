@@ -225,7 +225,7 @@ export default function Admin() {
                         <h1 className={styles.title}>Figuren</h1>
 
                         <div className={styles.shapes}>
-                            { config && config.rounds && config.rounds[0].map((r, i) => (
+                            { config && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[0].map((r, i) => (
                                 <Shape key={i} shape={r} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>
