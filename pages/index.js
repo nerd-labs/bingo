@@ -19,7 +19,7 @@ export default function Home() {
     const router = useRouter()
     const [hasBingo, setHasBingo] = useState(false);
     const [user, setUser] = useState();
-    const [pickedShapes, setPickedShapes] = useState();
+    const [pickedShapes, setPickedShapes] = useState([]);
 
     const config = useConfig();
     const [, addLog] = useLogs();
