@@ -11,16 +11,15 @@ import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
-import Shape, { SHAPES } from '../src/components/Shape';
+import Shape from '../src/components/Shape';
 
 const db = firebase.database();
 
 export default function Home() {
     const router = useRouter()
-    const [range, setRange] = useState();
     const [hasBingo, setHasBingo] = useState(false);
     const [user, setUser] = useState();
-    const [pickedShapes, setPickedShapes] = useState();
+    const [pickedShapes, setPickedShapes] = useState([]);
 
     const config = useConfig();
     const [, addLog] = useLogs();
@@ -64,19 +63,6 @@ export default function Home() {
         }
 
         getIp();
-    }, []);
-
-    useEffect(() => {
-        const ref = db.ref('ranks');
-
-        ref.on("value", (snapshot) => {
-            const activeRange = snapshot.val().find(obj => obj && obj.active);
-            setRange(activeRange || null);
-        });
-
-        return () => {
-            ref.off();
-        };
     }, []);
 
     useEffect(() => {
@@ -125,7 +111,7 @@ export default function Home() {
                 <div className={styles.bingo}>
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
-                            { config && config.rounds && config.rounds[0].map((r, i) => (
+                            { config && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
                                 <Shape key={i} shape={r} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>

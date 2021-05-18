@@ -126,12 +126,12 @@ export default function Admin() {
                             {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
                         </p>
 
-                        { config.activeRange.rank < 4 && <button onClick={() => {
-
+                        { config.activeRange.rank < 4 && <button className={styles.button} onClick={() => {
                             const confirmmed = confirm("Ben je zeker?");
                             if (!confirmmed) return;
 
                             ballsRef.current.remove();
+                            shapesRef.current.set([false, false, false, false, false]);
 
                             if (config.activeRange.round < 3) {
                                 db.ref(`ranks/${config.activeRange.rank}`).update({
@@ -147,14 +147,14 @@ export default function Admin() {
                                     active: true,
                                 });
                             }
-                        }}>Start new {config.activeRange.round < 3 ? 'round' : 'range'}</button>
+                        }}>Start nieuwe {config.activeRange.round < 3 ? 'ronde' : 'rang'}</button>
                         }
                     </div>
                 )}
 
 
                 <div className={styles.formBlock}>
-                    <h1 className={styles.title}> Add new ball</h1>
+                    <h1 className={styles.title}>Voeg nieuw nummer toe</h1>
                     <form onSubmit={(e) => {
                         e.preventDefault();
 
@@ -173,13 +173,13 @@ export default function Admin() {
                         <input className={styles.input} name="range" value={ballValue} onChange={(e) => {
                             setBallValue(e.target.value)
                         }} />
-                        <button type="submit" className={styles.button}>Add new ball</button>
+                        <button type="submit" className={styles.button}>Toevoegen</button>
                     </form>
                 </div>
 
                 { balls && (
                     <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Balls</h1>
+                        <h1 className={styles.title}>Ballen</h1>
 
                         <div>
                             {
@@ -195,7 +195,7 @@ export default function Admin() {
 
                 { users && (
                     <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Online users</h1>
+                        <h1 className={styles.title}>Online families</h1>
 
                         <div>
                             {
@@ -211,22 +211,22 @@ export default function Admin() {
 
                 { bingo[0] && (
                     <div className={styles.formBlock}>
-                        <h1 className={styles.title}>User with bingo</h1>
+                        <h1 className={styles.title}>Families met bingo</h1>
 
                         <div>
                             {bingo[0].name} { toDate(bingo[0].bingo) }
-                            <button onClick={() => accept()}>Accept</button>
-                            <button onClick={() => decline(bingo[0].key)}>Decline</button>
+                            <button className={styles.button} onClick={() => accept()}>Accepteer</button>
+                            <button className={styles.button} onClick={() => decline(bingo[0].key)}>Wijger</button>
                         </div> 
                     </div>
                 )}
 
                 { shapes && (
                     <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Shapes</h1>
+                        <h1 className={styles.title}>Figuren</h1>
 
                         <div className={styles.shapes}>
-                            { config && config.rounds && config.rounds[0].map((r, i) => (
+                            { config && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
                                 <Shape key={i} shape={r} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>
@@ -254,7 +254,6 @@ export default function Admin() {
                     </>
                 )}
             </div>
-
         </main>
     );
 }
