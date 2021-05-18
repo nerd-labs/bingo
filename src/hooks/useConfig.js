@@ -7,17 +7,19 @@ const db = firebase.database();
 
 export default function useConfig() {
     const [levelConfig, setLevelConfig] = useState();
+    const [activeRange, setActiveRange] = useState();
 
     useEffect(() => {
-        const ref = db.ref('priceRanks');
+        const ref = db.ref('ranks');
 
         ref.on("value", (snapshot) => {
-            const activeRange = Object.values(snapshot.val()).find((obj) => obj.active);
+            const range = snapshot.val().find((obj) => obj && obj.active);
+            setActiveRange(range);
 
             let rang = null;
 
-            if (activeRange) {
-                switch(activeRange.name) {
+            if (range) {
+                switch(range.label) {
                     case 'Rang 1':
                         rang = 'level1';
                         break;
@@ -44,5 +46,5 @@ export default function useConfig() {
         };
     }, [])
 
-    return levelConfig;
+    return { levelConfig, activeRange };
 }

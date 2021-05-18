@@ -26,11 +26,12 @@ export default function Grid({ title }) {
         <div className={styles.grid}>
             <div className={styles.title}>
                 <div className={styles.titleInner}>
-                    { title }
+                        {config.activeRange && config.activeRange.label} 
+                        {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
                 </div>
             </div>
             <div className={styles.gridInner}>
-                {config && config.prizes && shuffle(config.prizes).map(item => (
+                {config && config.levelConfig && config.levelConfig.prizes && shuffle(config.levelConfig.prizes).map(item => (
                     <Box
                         big={item.big}
                         key={item.name}
