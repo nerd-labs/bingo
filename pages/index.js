@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
 import useConfig from '../src/hooks/useConfig';
+import useLogs from '../src/hooks/useLogs';
 
 import Balls from '../src/components/Balls';
 import Bingo from '../src/components/Bingo';
@@ -19,10 +20,13 @@ export default function Home() {
     const [range, setRange] = useState();
     const [hasBingo, setHasBingo] = useState(false);
     const [user, setUser] = useState();
+    const [pickedShapes, setPickedShapes] = useState();
 
     const config = useConfig();
+    const [, addLog] = useLogs();
 
     const bingoRef = useRef(db.ref('bingo'));
+    const shapesRef = useRef(db.ref('shapes'));
 
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {
@@ -73,7 +77,17 @@ export default function Home() {
         return () => {
             ref.off();
         };
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        shapesRef.current.on('value', (snapshot) => {
+            setPickedShapes(snapshot.val());
+        });
+
+        return () => {
+            shapesRef.current.off();
+        };
+    }, []);
 
     function bingo() {
         const newBingo = bingoRef.current.push();
@@ -83,6 +97,14 @@ export default function Home() {
             bingo: Date.now(),
             key: newBingo.key,
         });
+    }
+
+    function shapeClicked(index) {
+        shapesRef.current.update({
+            [index]: true
+        });
+
+        addLog(`${user.name} clicked shape ${index + 1}`);
     }
 
     if (!user) return null;
@@ -104,7 +126,7 @@ export default function Home() {
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
                             { config && config.rounds && config.rounds[0].map((r, i) => (
-                                <Shape key={i} shape={r} />
+                                <Shape key={i} shape={r} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>
                         <Button text='BINGO' onClick={() => bingo() } />

@@ -1,11 +1,43 @@
 .admin {
-  min-height: 100vh;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    display: grid;
+    grid-template-areas:
+        "content logs";
+    grid-template-columns: 1fr 450px;
+    height: 100vh;
+    overflow: hidden;
+    padding: 30px;
+}
+
+.content {
+    grid-area: content;
+}
+
+.logs {
+    display: flex;
+    flex-direction: column;
+    font-family: monospace;
+    grid-area: logs;
+    height: 100%;
+    overflow: hidden;
+}
+
+.logsContent {
+    background-color: white;
+    height: 100%;
+    overflow: auto;
+    padding: 10px;
+}
+
+.logLine {
+    margin: 10px 0;
+}
+
+.logTime {
+    color: #999;
+}
+
+.logTime::after {
+    content: ' - ';
 }
 
 .formBlock {
@@ -14,7 +46,6 @@
 
 .title {
     color: #69BE28;
-    text-align: center;
 }
 
 .input {
@@ -37,4 +68,8 @@
     padding: 10px 20px;
     height: 40px;
     width: 200px;
+}
+
+.shapes {
+    display: flex;
 }

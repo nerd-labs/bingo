@@ -24,11 +24,15 @@ export const SHAPES = {
     LOGO: [1, 2, 4, 5, 6, 10, 16, 20, 21, 22, 24, 25],
 }
 
-export default function Shape({ shape }) {
+export default function Shape({ disabled, shape, onClick }) {
     const bulls = [...Array(25)].map((_v, i) => i + 1);
 
+    function onShapeClick() {
+        if (!disabled) onClick();
+    }
+
     return (
-        <div className={styles.shape}>
+        <div className={classNames(styles.shape, { [styles.disabled]: disabled })} onClick={onShapeClick}>
             { bulls.map((i) => (
                 <span 
                     key={i} 
