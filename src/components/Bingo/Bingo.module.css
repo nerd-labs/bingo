@@ -78,13 +78,8 @@
     animation-duration: 700ms;
     animation-fill-mode: both;
     animation-name: fadeIn;
-    /* background-clip: text; */
-    /* background-image: linear-gradient(to right, var(--color-yellow), var(--color-orange)); */
     display: inline-block;
     position: relative;
-    /* -webkit-text-fill-color: transparent; */
-    /* text-shadow: 0 0 40px #fff; */
-    /* -webkit-text-stroke: 1px transparent; */
 }
 
 .bulb {
