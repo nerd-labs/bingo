@@ -1,24 +1,23 @@
 import styles from '../styles/Home.module.css'
-import {useEffect, useState, useRef} from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
 import Balls from '../src/components/Balls';
-import AnimatedText from '../src/components/AnimatedText';
+import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
+import Shape, { SHAPES } from '../src/components/Shape';
 
 const db = firebase.database();
 
 export default function Home() {
     const router = useRouter()
     const [range, setRange] = useState();
-    const [balls, setBalls] = useState([]);
     const [hasBingo, setHasBingo] = useState(false);
     const [user, setUser] = useState();
 
-    const usersRef = useRef(db.ref('users'));
     const bingoRef = useRef(db.ref('bingo'));
 
     const [userId] = useState(() => {
@@ -30,6 +29,10 @@ export default function Home() {
     useEffect(() => {
         bingoRef.current.on('child_added', () => {
             setHasBingo(true);
+        });
+
+        bingoRef.current.on('value', (snapshot) => {
+            if (!snapshot.val()) setHasBingo(false);
         });
 
         return () => {
@@ -51,7 +54,7 @@ export default function Home() {
 
             setUser(value);
         }
-        
+
         getIp();
     }, []);
 
@@ -61,18 +64,6 @@ export default function Home() {
         ref.on("value", (snapshot) => {
             const activeRange = Object.entries(snapshot.val()).find(([key, obj]) => obj.active && key);
             setRange(activeRange ? activeRange[1] : null);
-        });
-
-        return () => {
-            ref.off();
-        };
-    }, [])
-
-    useEffect(() => {
-        const ref = db.ref('balls');
-
-        ref.on("value", (snapshot) => {
-            setBalls(snapshot.val());
         });
 
         return () => {
@@ -100,22 +91,29 @@ export default function Home() {
                     <Grid title={range ? range.name : 'No active game'} />
                 </div>
                 <div className={styles.balls}>
-                    <Balls balls={balls} />
+                    <Balls />
                 </div>
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
-
-                    { hasBingo && <h1>BINGO!!!!</h1> }
                 </div>
                 <div className={styles.bingo}>
-                    <Button text='BINGO' onClick={() => bingo() } />
+                    <div className={styles.bingoWrapper}>
+                        <div className={styles.shapes}>
+                            <Shape shape={SHAPES.LOGO} />
+                            <Shape shape={SHAPES.E} />
+                            <Shape shape={SHAPES.U} />
+                            <Shape shape={SHAPES.R} />
+                            <Shape shape={SHAPES.I} />
+                        </div>
+                        <Button text='BINGO' onClick={() => bingo() } />
+                    </div>
                 </div>
                 <div className={styles.extraPrice}>
                     <ExtraPrice />
                 </div>
             </div>
 
-            <AnimatedText className={styles.bingoAnimation} text="bingo" />
+            { hasBingo && <Bingo /> }
         </>
     )
 }

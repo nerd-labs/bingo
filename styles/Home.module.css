@@ -4,8 +4,8 @@
     grid-template-areas: 
         "fam fam fam"
         "grid balls logo"
-        "grid balls bingo"
-        "grid balls extraPrice";
+        "grid balls extraPrice"
+        "grid balls bingo";
     grid-template-columns: auto 66px 1fr;
     grid-template-rows: 100px auto auto auto;
     margin: 0 auto; 
@@ -24,12 +24,19 @@
     grid-area: logo;
 }
 
-.logoImage {
+.shapes {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.logoImage,
+.bingoWrapper {
     width: 100%;
 }
 
 .bingo {
-    align-items: center;
+    align-items: flex-end;
     display: flex;
     grid-area: bingo;
 }
@@ -49,10 +56,14 @@
     grid-area: extraPrice;
 }
 
-.bingoAnimation {
-    font-size: 200px;
+.bingoBox {
+    background: red;
+    font-size: 170px;
+    height: 220px;
     left: 50%;
+    padding: 50px;
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
+    z-index: 100;
 }

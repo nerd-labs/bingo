@@ -1,0 +1,138 @@
+.bingo {
+  background-image: linear-gradient(
+    var(--color-purple),
+    var(--color-pink),
+    var(--color-purple)
+  );
+  border-radius: 20px;
+  box-shadow: 0 10px 0 0 rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, .7);
+  display: inline-block;
+  font-size: 300px;
+  font-weight: 900;
+  left: 50%;
+  margin-top: 30px;
+  padding: 8px;
+  position: absolute;
+  text-align: center;
+  text-transform: uppercase;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+.bingoInner {
+  --offset: 0;
+  --size: 0;
+  --spacing: 0;
+
+  background-image: radial-gradient(var(--color-pink), var(--color-purple));
+  border-bottom: 1px solid var(--color-pink);
+  border-radius: 12px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+  height: 330px;
+  padding: 60px 30px;
+  position: relative;
+  width: 1000px;
+}
+
+.top,
+.bottom {
+  box-sizing: border-box;
+  display: flex;
+  left: var(--offset);
+  justify-content: space-around;
+  padding: 0 var(--spacing);
+  position: absolute;
+  right: var(--offset);
+}
+
+.top {
+  top: var(--offset);
+}
+
+.bottom {
+  bottom: var(--offset);
+}
+
+.left,
+.right {
+  bottom: var(--offset);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  top: var(--offset);
+}
+
+.left {
+  left: var(--offset);
+}
+
+.right {
+  right: var(--offset);
+}
+
+
+.letter {
+    animation-duration: 700ms;
+    animation-fill-mode: both;
+    animation-name: fadeIn;
+    /* background-clip: text; */
+    /* background-image: linear-gradient(to right, var(--color-yellow), var(--color-orange)); */
+    display: inline-block;
+    position: relative;
+    /* -webkit-text-fill-color: transparent; */
+    /* text-shadow: 0 0 40px #fff; */
+    /* -webkit-text-stroke: 1px transparent; */
+}
+
+.bulb {
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-iteration-count: infinite;
+  background-image: linear-gradient(to left, #ffffce, #eee472);
+  border-radius: 50%;
+  height: var(--size);
+  width: var(--size);
+}
+
+.bulb:nth-child(5n + 2) {
+  animation-delay: 0.1s;
+}
+
+.bulb:nth-child(5n + 3) {
+  animation-delay: 0.2s;
+}
+
+.bulb:nth-child(5n + 4) {
+  animation-delay: 0.3s;
+}
+
+.bulb:nth-child(5n + 5) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes blink {
+  from {
+    box-shadow: 0 0 0 white;
+    opacity: 0.5;
+  }
+
+  to {
+    box-shadow: 0 0 5px #eee472;
+    opacity: 1;
+  }
+}
