@@ -67,7 +67,6 @@ export default function Home() {
 
         ref.on("value", (snapshot) => {
             const activeRange = snapshot.val().find(obj => obj && obj.active);
-            console.log(activeRange);
             setRange(activeRange || null);
         });
 
