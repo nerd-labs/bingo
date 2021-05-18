@@ -8,7 +8,9 @@ import styles from './Grid.module.css';
 export default function Grid({ title }) {
     const config = useConfig();
 
-    const prizes = useMemo(() => shuffle(config?.levelConfig?.prizes || []), [config.levelConfig, config.activeRange]);
+    const prizes = useMemo(() => (
+        shuffle(config?.levelConfig?.prizes || [])
+    ), [config.levelConfig, config.activeRange]);
 
     function shuffle(array) {
         const shuffledArray = [...array];
@@ -33,10 +35,10 @@ export default function Grid({ title }) {
                 </div>
             </div>
             <div className={styles.gridInner}>
-                {prizes && prizes.map(item => (
+                {prizes && prizes.map((item, i) => (
                     <Box
                         big={item.big}
-                        key={item.name}
+                        key={`${item.name}-${i}`}
                         url={item.url}
                         style={{ '--delay': `${getNumberBetween(500, 2000)}ms` }}
                     >

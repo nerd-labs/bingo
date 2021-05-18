@@ -17,10 +17,10 @@
     box-shadow: inset 0 0 8px rgba(0,0,0,.3);
     display: grid;
     grid-gap: var(--grid-gap);
-    grid-template-columns: repeat(4, var(--square-size));
+    grid-template-columns: repeat(5, var(--square-size));
     grid-auto-rows: var(--square-size);
     padding: 40px 30px;
-    height: 1000px;
+    height: 720px;
 }
 
 .title {
