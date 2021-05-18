@@ -7,7 +7,7 @@
   border-radius: 20px;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
   color: var(--color-white);
-  font-size: 24px;
+  font-size: 20px;
   height: var(--square-size);
   padding: 4px;
   position: relative;
@@ -46,7 +46,7 @@
 }
 
 .bigText {
-  bottom: 10px;
+  bottom: 5px;
   color: var(--color-yellow);
   font-size: 22px;
   left: 0;
