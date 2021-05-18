@@ -3,6 +3,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
+import useConfig from '../src/hooks/useConfig';
+
 import Balls from '../src/components/Balls';
 import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
@@ -17,6 +19,8 @@ export default function Home() {
     const [range, setRange] = useState();
     const [hasBingo, setHasBingo] = useState(false);
     const [user, setUser] = useState();
+
+    const config = useConfig();
 
     const bingoRef = useRef(db.ref('bingo'));
 
@@ -99,11 +103,9 @@ export default function Home() {
                 <div className={styles.bingo}>
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
-                            <Shape shape={SHAPES.S} />
-                            <Shape shape={SHAPES.U} />
-                            <Shape shape={SHAPES.P} />
-                            <Shape shape={SHAPES.E} />
-                            <Shape shape={SHAPES.R} />
+                            { config && config.rounds && config.rounds[0].map((r, i) => (
+                                <Shape key={i} shape={r} />
+                            ))}
                         </div>
                         <Button text='BINGO' onClick={() => bingo() } />
                     </div>

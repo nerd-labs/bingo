@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import { firebase } from '../../../src/initFirebase';
-import config from '../../config';
+import useConfig from '../../hooks/useConfig';
 import Box from '../Box';
 
 import styles from './Grid.module.css';
 
-const db = firebase.database();
-
 export default function Grid({ title }) {
-    const [items, setItems] = useState();
+    const config = useConfig();
 
     function shuffle(array) {
         const shuffledArray = [...array];
@@ -25,43 +22,6 @@ export default function Grid({ title }) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-
-    useEffect(() => {
-        const ref = db.ref('priceRanks');
-
-        ref.on("value", (snapshot) => {
-            const activeRange = Object.values(snapshot.val()).find((obj) => obj.active);
-
-            let rang = null;
-
-            if (activeRange) {
-                switch(activeRange.name) {
-                    case 'Rang 1':
-                        rang = 'level1';
-                        break;
-                    case 'Rang 2':
-                        rang = 'level2';
-                        break;
-                    case 'Rang 3':
-                        rang = 'level3';
-                        break;
-                    case 'Super Jackpot':
-                        rang = 'superJackpot';
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (config[rang]) setItems(shuffle(config[rang].prizes));
-            else setItems([]);
-        });
-
-        return () => {
-            ref.off();
-        };
-    }, [])
-
     return (
         <div className={styles.grid}>
             <div className={styles.title}>
@@ -70,7 +30,7 @@ export default function Grid({ title }) {
                 </div>
             </div>
             <div className={styles.gridInner}>
-                {items && items.map(item => (
+                {config && config.prizes && shuffle(config.prizes).map(item => (
                     <Box
                         big={item.big}
                         key={item.name}
