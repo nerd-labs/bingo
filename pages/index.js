@@ -61,19 +61,6 @@ export default function Home() {
         getIp();
     }, []);
 
-    // useEffect(() => {
-    //     const ref = db.ref('ranks');
-    //
-    //     ref.on("value", (snapshot) => {
-    //         const activeRange = snapshot.val().find(obj => obj && obj.active);
-    //         setRange(activeRange || null);
-    //     });
-    //
-    //     return () => {
-    //         ref.off();
-    //     };
-    // }, [])
-
     function bingo() {
         const newBingo = bingoRef.current.push();
         newBingo.set({
@@ -85,8 +72,6 @@ export default function Home() {
     }
 
     if (!user) return null;
-
-    console.log(config);
 
     return (
         <>
