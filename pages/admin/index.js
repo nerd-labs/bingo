@@ -131,6 +131,7 @@ export default function Admin() {
                             if (!confirmmed) return;
 
                             ballsRef.current.remove();
+                            shapesRef.current.set([false, false, false, false, false]);
 
                             if (config.activeRange.round < 3) {
                                 db.ref(`ranks/${config.activeRange.rank}`).update({
@@ -225,7 +226,7 @@ export default function Admin() {
                         <h1 className={styles.title}>Figuren</h1>
 
                         <div className={styles.shapes}>
-                            { config && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[0].map((r, i) => (
+                            { config && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
                                 <Shape key={i} shape={r} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>
