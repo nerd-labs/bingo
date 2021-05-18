@@ -81,6 +81,7 @@
             "grid grid balls";
         grid-template-columns: 360px 294px 66px;
         grid-template-rows: auto;
+        padding-bottom: 30px;
         width: 800px;
     }
 
