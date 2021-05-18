@@ -18,7 +18,7 @@ export default function Balls() {
 
             if (value) {
                 setBalls(Object.values(value).reverse());
-            }
+            } else setBalls([]);
         });
 
         return () => {
