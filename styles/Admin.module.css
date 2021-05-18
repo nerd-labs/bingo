@@ -1,8 +1,8 @@
 .admin {
     display: grid;
     grid-template-areas:
-        "content logs";
-    grid-template-columns: 1fr 450px;
+        "content balls users logs";
+    grid-template-columns: 1fr 1fr 450px 450px;
     height: 100vh;
     overflow: hidden;
     padding: 30px;
@@ -12,23 +12,36 @@
     grid-area: content;
 }
 
-.logs {
+.logs, .users, .balls {
     display: flex;
     flex-direction: column;
-    font-family: monospace;
-    grid-area: logs;
     height: 100%;
     overflow: hidden;
 }
 
-.logsContent {
+.logs {
+    grid-area: logs;
+}
+
+.users {
+    grid-area: users;
+}
+
+.balls {
+    grid-area: balls;
+}
+
+.gridContent {
     background-color: white;
     height: 100%;
     overflow: auto;
+    font-family: monospace;
+    margin: 10px;
     padding: 10px;
+    text-align: left;
 }
 
-.logLine {
+.line {
     margin: 10px 0;
 }
 
@@ -41,7 +54,9 @@
 }
 
 .formBlock {
-    margin-bottom: 50px;
+    color: white;
+    margin-bottom: 150px;
+    text-align: center;
 }
 
 .title {
@@ -61,15 +76,42 @@
 
 .button {
     background-color: #69BE28;
-    border: 2px solid #69BE28;
+    border: 0;
+    border-radius: 4px;
     box-sizing: border-box;
     color: white;
     cursor: pointer;
     padding: 10px 20px;
     height: 40px;
+    margin: 0 5px;
     width: 200px;
 }
 
+.buttonDecline {
+    background-color: var(--color-white);
+    color: var(--color-bordeaux);
+}
+
 .shapes {
+    align-items: center;
     display: flex;
+    justify-content: center;
+}
+
+.ranks {
+    text-align: center;
+}
+
+.drawBalls {
+    align-items: center;
+    color: white;
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(8, 50px);
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.activeRound {
+    color: white;
 }

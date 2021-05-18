@@ -83,6 +83,8 @@ export default function Home() {
             bingo: Date.now(),
             key: newBingo.key,
         });
+
+        addLog(`${user.name} clicked bingo!`);
     }
 
     function shapeClicked(index) {
