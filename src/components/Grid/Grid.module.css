@@ -18,7 +18,7 @@
     display: grid;
     grid-gap: var(--grid-gap);
     grid-template-columns: repeat(4, var(--square-size));
-    grid-auto-rows: 140px;
+    grid-auto-rows: var(--square-size);
     padding: 40px 30px;
     height: 1000px;
 }
@@ -49,4 +49,3 @@
     padding: 0 40px;
     text-shadow: 0 0 4px rgba(0, 0, 0, .5);
 }
-
