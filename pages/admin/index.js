@@ -13,7 +13,6 @@ export default function Admin() {
     const [users, setUsers] = useState();
     const [balls, setBalls] = useState();
     const [bingo, setBingo] = useState([]);
-    // const [activeRank, setActiveRank] = useState();
 
     const config = useConfig();
 
