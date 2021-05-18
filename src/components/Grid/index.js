@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 
 import useConfig from '../../hooks/useConfig';
 import Box from '../Box';
@@ -7,6 +7,8 @@ import styles from './Grid.module.css';
 
 export default function Grid({ title }) {
     const config = useConfig();
+
+    const prizes = useMemo(() => shuffle(config?.levelConfig?.prizes || []), [config.levelConfig, config.activeRange]);
 
     function shuffle(array) {
         const shuffledArray = [...array];
@@ -31,7 +33,7 @@ export default function Grid({ title }) {
                 </div>
             </div>
             <div className={styles.gridInner}>
-                {config && config.levelConfig && config.levelConfig.prizes && shuffle(config.levelConfig.prizes).map(item => (
+                {prizes && prizes.map(item => (
                     <Box
                         big={item.big}
                         key={item.name}
