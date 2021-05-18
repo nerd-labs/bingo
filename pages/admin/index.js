@@ -87,7 +87,7 @@ export default function Admin() {
                     {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
                     </p>
 
-                    { config.activeRange.rank < 4 && <button onClick={() => {
+                    { config.activeRange.rank < 4 && <button className={styles.button} onClick={() => {
 
                         const confirmmed = confirm("Ben je zeker?");
                         if (!confirmmed) return;
@@ -179,8 +179,8 @@ export default function Admin() {
 
                     <div>
                         {bingo[0].name} { toDate(bingo[0].bingo) }
-                        <button onClick={() => accept()}>Accept</button>
-                        <button onClick={() => decline(bingo[0].key)}>Decline</button>
+                        <button className={styles.button} onClick={() => accept()}>Accept</button>
+                        <button className={styles.button} onClick={() => decline(bingo[0].key)}>Decline</button>
                     </div> 
                 </div>
             )}
