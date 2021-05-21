@@ -12,7 +12,7 @@ import styles from './Admin.module.css'
 const db = firebase.database();
 
 export default function Admin() {
-    const MAX_RANKS = 4;
+    const MAX_RANKS = 3;
     const MAX_ROUNDS = 3;
 
     const [ballValue, setBallValue] = useState('');
@@ -247,7 +247,7 @@ export default function Admin() {
             countdownRef.current.remove();
         }
 
-        addLog(`Nieuwe ronde gestart: rang ${newRank}, ronde ${newRound}`, true);
+        addLog(`Nieuwe ronde gestart: rang ${newRank + 1}, ronde ${newRound}`, true);
     }
 
     return (
