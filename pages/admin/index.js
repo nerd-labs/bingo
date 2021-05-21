@@ -182,20 +182,30 @@ export default function Admin() {
         ballsRef.current.remove();
         clearShapes();
 
+        let newRound = config.activeRange.round;
+        let newRank = config.activeRange.rank;
+
         if (config.activeRange.round < 3) {
+            newRound += 1;
+
             db.ref(`ranks/${config.activeRange.rank}`).update({
-                round: config.activeRange.round + 1,
+                round: newRound,
             });
         } else {
             db.ref(`ranks/${config.activeRange.rank}`).update({
                 active: false,
             });
 
-            db.ref(`ranks/${config.activeRange.rank + 1}`).update({
+            newRank += 1;
+            newRound = 1;
+
+            db.ref(`ranks/${newRank}`).update({
                 round: 1,
                 active: true,
             });
         }
+
+        addLog(`Nieuw spel gestart: rang ${newRank}, ronde ${newRound}`, true);
     }
 
     return (
@@ -319,7 +329,7 @@ export default function Admin() {
                 <div className={styles.gridContent}>
                     {
                         logs.map((log) => (
-                            <div key={log.key} className={styles.line}>
+                            <div key={log.key} className={classNames(styles.line, { [styles.highlight]: log.highlight })}>
                                 <span className={styles.logTime}>
                                     { getTime(log.time) }
                                 </span>
