@@ -15,6 +15,7 @@ import ExtraPrice from '../../src/components/ExtraPrice';
 import Grid from '../../src/components/Grid';
 import Countdown from '../../src/components/Countdown';
 import Shape, { SHAPES }from '../../src/components/Shape';
+import useSound from '../../src/hooks/useSound';
 
 const db = firebase.database();
 
@@ -26,6 +27,9 @@ export default function Home() {
     const [clickedShape, setClickedShape] = useState(false);
     const [user, setUser] = useState();
     const [pickedShapes, setPickedShapes] = useState([]);
+
+    const [playWinner] = useSound('./winnaar.mp3')
+    const [playFigureWinner] = useSound('./figuur.mp3')
 
     const config = useConfig();
     const [, addLog] = useLogs();
@@ -60,9 +64,13 @@ export default function Home() {
         });
 
         bingoRef.current.on('child_removed', (snapshot) => {
+            const value = snapshot.val();
+
             if (snapshot.val().userId === user?.key) {
                 setClickedBingo(false);
             }
+
+            if (value.accept) playWinner();
         });
 
         bingoRef.current.on('value', (snapshot) => {
@@ -101,6 +109,12 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
+        shapesRef.current.on('child_changed', (snapshot) => {
+            if (snapshot.val().accept) {
+                playFigureWinner();
+            }
+        });
+
         shapesRef.current.on('value', (snapshot) => {
             const value = snapshot.val();
 
@@ -176,6 +190,7 @@ export default function Home() {
 
                 { showCountdown && (
                     <div className={styles.countdown}>
+                        <h1>Pauze</h1>
                         <Countdown /> 
                     </div>
                 )}
@@ -191,7 +206,7 @@ export default function Home() {
                     <div className={styles.bingo}>
                         <div className={styles.bingoWrapper}>
                             <div className={styles.shapes}>
-                                { config.activeRange.rank && [...Array(6).keys()].map((r, i) => {
+                                { !!config.activeRange && [...Array(6).keys()].map((r, i) => {
                                     const { rank, round } = config.activeRange;
                                     const shape = SHAPES[`SHAPE_${rank + 1}_${round}_${i + 1}`];
 

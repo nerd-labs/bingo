@@ -59,6 +59,7 @@ export default function Countdown({ onEnd }) {
             setDrawTime(snapshot.val());
         });
 
+        return () => countdownRef.current.off();
     }, []);
 
     useEffect(() => {

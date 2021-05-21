@@ -119,6 +119,10 @@ export default function Admin() {
     }, [])
 
     function accept(bingo) {
+        bingoRef.current.child(bingo.key).update({
+            accept: true,
+        });
+
         bingoRef.current.remove();
 
         addLog(`Admin heeft de bingo van ${bingo.name} aanvaard!`);
@@ -126,6 +130,7 @@ export default function Admin() {
 
     function decline(bingo) {
         const bingoKey = db.ref(`bingo/${bingo.key}`);
+
         bingoKey.remove();
 
         addLog(`Admin heeft de bingo van ${bingo.name} geweigerd`);
@@ -134,13 +139,14 @@ export default function Admin() {
     function acceptShape(index, user) {
         shapesRef.current.child(index).set({
             enabled: false,
+            accept: true,
         });
 
         addLog(`Admin heeft vorm ${index + 1} van ${user.name} aanvaard!`);
     }
 
     function declineShape(index, user) {
-        const userKey = shapesRef.current.child(`${index + 1}/users/${user.key}`);
+        const userKey = shapesRef.current.child(`${index}/users/${user.key}`);
         userKey.remove();
 
         addLog(`Admin heeft vorm ${index + 1} van ${user.name} geweigerd`);
@@ -153,6 +159,7 @@ export default function Admin() {
             return alert(`De bal met nummer ${ballValue} is al reeds getrokken!`);
         }
 
+        if (!ballValue) return alert('Gelieve een nummer in te geven');
         if (ballValue > 75) return alert('Dit nummer is te hoog');
 
         const confirmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
@@ -185,7 +192,7 @@ export default function Admin() {
         const confirmed = confirm('Ben je zeker?');
         if (!confirmed) return;
 
-        db.ref('ranks').remove();
+        // db.ref('ranks').remove();
 
         ['Rang 1', 'Rang 2', 'Rang 3', 'Super Jackpot'].forEach((label, key) => {
             db.ref(`ranks/${key}`).set({
@@ -269,20 +276,21 @@ export default function Admin() {
 
                 { !!shapes.length && (
                     <div className={styles.shapes}>
-                        { config.activeRange.rank && shapes.map((r, i) => {
+                        { config.activeRange && shapes.map((r, i) => {
                             const { rank, round } = config.activeRange;
-                            const key = `SHAPE_${rank}_${round}_${i + 1}`;
+                            const key = `SHAPE_${rank + 1}_${round}_${i + 1}`;
                             const shape = SHAPES[key];
 
                             return shape && (
-                                <>
-                                    <Shape 
-                                        key={key} 
-                                        shape={shape} 
-                                        disabled={shapes[i].enabled} 
-                                    />
+                                <div key={key}>
+                                    <div className={styles.shape}>
+                                        <Shape 
+                                            shape={shape} 
+                                            disabled={shapes[i].enabled} 
+                                        />
+                                    </div>
 
-                                    <div className={styles.shapeWrapper} key={`${key}-2`}>
+                                    <div className={styles.shapeWrapper}>
                                         { shapes[i].users && 
                                         <>
                                             <div> {shapes[i].users[0].name} - { toDate(shapes[i].users[0].time) }</div>
@@ -301,7 +309,7 @@ export default function Admin() {
                                         </>
                                         }
                                     </div>
-                                </>
+                                </div>
                             );
                         })}
                     </div>
@@ -315,7 +323,7 @@ export default function Admin() {
                     <>
                         <p className={styles.activeRound}>
                             {config.activeRange && config.activeRange.label} 
-                            {config.activeRange && config.activeRange.round && config.activeRange.rank !== 4 && ` - Ronde ${config.activeRange.round}`} 
+                            {config.activeRange && config.activeRange.round && config.activeRange.rank !== MAX_RANKS && ` - Ronde ${config.activeRange.round}`} 
                         </p>
 
                         { config.activeRange.rank < MAX_RANKS && (
@@ -341,7 +349,7 @@ export default function Admin() {
                 <div className={styles.formBlock}>
                     <h1 className={styles.title}>Getrokken Ballen</h1>
 
-                    { hasActiveGame && (
+                    { (hasActiveGame && config.activeRange.round !== MAX_ROUNDS) && (
                         <form onSubmit={submitNumber}>
                             <input 
                                 className={styles.input} 
