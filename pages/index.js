@@ -35,8 +35,6 @@ export default function Home() {
     const hasExtraPrice = useMemo(() => config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
     const showCountdown = useMemo(() => config.activeRange.round === 3, [config.activeRange.round]);
 
-    console.log({ showCountdown });
-
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {
             return localStorage.getItem('bingo.euri.com');
