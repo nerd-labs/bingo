@@ -83,6 +83,7 @@
 .ball3 {
     --color1: #dfddcc;
     --color2: var(--color-white);
+    text-shadow: none;
 
     color: black;
 }
