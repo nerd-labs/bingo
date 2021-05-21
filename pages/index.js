@@ -146,7 +146,7 @@ export default function Home() {
                                     const { rank, round } = config.activeRange;
                                     const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
 
-                                    return shape &&<Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
+                                    return shape && <Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
                                 })}
                             </div>
                             <Button text='BINGO' onClick={() => bingo() } />
