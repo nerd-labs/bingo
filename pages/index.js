@@ -130,11 +130,13 @@ export default function Home() {
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
-                <div className={styles.qrCode}>
-                    Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
-                    <img src="./qr.png" alt="qr code" />
-                </div>
-
+                
+                { clickedBingo && (
+                    <div className={styles.qrCode}>
+                        Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
+                        <img src="./qr.png" alt="qr code" />
+                    </div>
+                )}
 
                 { !clickedBingo && (
                     <div className={styles.bingo}>
