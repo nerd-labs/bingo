@@ -76,10 +76,6 @@ export default function Bingo() {
     return (
         <div className={styles.bingo}>
             <div ref={wrapperRef} className={styles.bingoInner}>
-                <div className={styles.top}>
-                    <Bulbs bulbs={xBulbs} />
-                </div>
-
                 <div className={styles.bottom}>
                     <Bulbs bulbs={xBulbs} />
                 </div>

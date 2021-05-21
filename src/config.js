@@ -15,8 +15,16 @@ const level1 = {
             url: 'https://shop.kinepolis.be/nl',
         },
         {
+            name: 'Tafeltennis-set',
+            url: 'https://www.bol.com/nl/p/rucanor-tafeltennisset/9200000019258412/',
+        },
+        {
             name: 'Kubb set',
             url: 'https://www.bol.com/nl/p/outdoor-play-kubb-game/9200000022663906',
+        },
+        {
+            name: 'Wijnpakket Gervinum',
+            url: 'https://www.gervinum.be/',
         },
         {
             name: 'Badmintonset',
@@ -35,11 +43,15 @@ const level1 = {
             url: 'https://www.bol.com/nl/p/inventum-bm55-broodbakmachine/9200000025955257',
         },
         {
-            name: 'Durbuy Adventure Day (1p)',
+            name: 'Durbuy Adventure Day',
             url: 'https://www.adventure-valley.be/nl/pass/adventure-pass',
         },
         {
-            name: 'Ticket Bobbejaanland (1p)',
+            name: 'Voetbal goal',
+            url: 'https://www.bol.com/nl/p/2x-voetbalgoals-voetbaldoelen-90-x-59-x-61-cm-inklapbaar-vouwbaar-buitenspeelgoed-buiten-spelen-sporten-sportief-speelgoed-voetballen-voetbaldoelen-voetbalgoals/9300000001426832',
+        },
+        {
+            name: 'Ticket Bobbejaanland',
             url: 'https://www.bobbejaanland.be/plan-je-bezoek/tickets',
         },
         {
@@ -47,13 +59,13 @@ const level1 = {
             url: 'https://antwerponly.com/collections',
         },
         {
-            name: 'Logitech Wireless Mouse',
-            url: 'https://www.logitech.com/en-us/products/mice/mx-master-3-mac-wireless-mouse.910-005693.html',
+            name: 'Bongobon: Glamping',
+            url: 'https://www.bongo.be/nl/cadeaubonnen/weekendje-weg-overnachten/glamping-884583.html',
             big: true,
         },
         {
-            name: 'Bongobon: Glamping',
-            url: 'https://www.bongo.be/nl/cadeaubonnen/weekendje-weg-overnachten/glamping-884583.html',
+            name: 'Luxe boottocht in Gent (10pers)',
+            url: 'https://www.minervaboten.be/en/gift-voucher/',
             big: true,
         },
         { 
@@ -64,6 +76,11 @@ const level1 = {
         {
             name: 'Good Beer Spa - Gift card',
             url: 'https://goodbeerspa.com/shop/giftvoucher-for-a-beer-spa-session-for-2-people-in-1-jacuzzi/',
+            big: true,
+        },
+        {
+            name: 'Blue Yeti Mic',
+            url: 'https://www.coolblue.be/nl/product/754197/blue-yeti-blackout.html',
             big: true,
         },
         {
@@ -96,6 +113,10 @@ const level2 = {
         {
             name: 'Kanjam',
             url: 'https://www.bol.com/nl/p/kanjam-game-set/9200000022847660',
+        },
+        {
+            name: 'Lego - Gift card',
+            url: 'https://www.lego.com/en-us/page/static/gift-cards/give/physical',
         },
         { 
             name: 'Steam - Gift card',
@@ -134,10 +155,6 @@ const level2 = {
             url: 'https://www.decathlon.be/nl/p/buitentent-voor-quechua-tent-2-seconds-3-xl-fresh-black/_/R-p-304345',
         },
         {
-            name: 'Mini-keuken voor de kindjes',
-            url: 'https://www.ikea.com/be/nl/p/duktig-keukentje-berken-60319972',
-        },
-        {
             name: 'Airfryer',
             url: 'https://www.coolblue.be/nl/product/882488/philips-airfryer-xl-hd9263-90.html',
             big: true,
@@ -163,8 +180,8 @@ const level2 = {
             big: true,
         },
         {
-            name: 'The Jane (2p) - Waarde-bon',
-            url: 'https://www.thejaneantwerp.com/eng/shop',
+            name: 'Massagegun',
+            url: 'https://www.coolblue.be/nl/product/872227/tunturi-massage-gun.html',
             big: true,
         }
     ],
@@ -174,34 +191,83 @@ const level2 = {
 const level3 = {
     prizes: [
         {
-            name: 'Nintendo Switch',
-            big: true,
-            url: 'https://www.bol.com/nl/p/nintendo-switch-lite-console-grijs/9200000116374158',
+            name: 'Mini-keuken voor de kindjes',
+            url: 'https://www.ikea.com/be/nl/p/duktig-keukentje-berken-60319972',
+        },
+        { 
+            name: 'Wijn abbonement',
+            url: 'https://ourdailybottle.com/pages/gifting',
         },
         {
-            name: 'Logitech Wireless Mouse',
-            url: 'https://www.logitech.com/en-us/products/mice/mx-master-3-mac-wireless-mouse.910-005693.html',
+            name: 'Nespresso Machine',
+            url: 'https://www.coolblue.be/nl/product/832739/magimix-nespresso-essenza-mini-zwart.html',
         },
         {
-            name: 'Disney+ jaarabonnement',
-            url: 'https://www.disneyplus.com/en-be',
-        },
-        {
-            name: 'Voetbaltruitje Rode Duivels',
-            url: 'https://shop.rbfa.be/match/home',
+            name: 'HelloFresh cadeaubon',
+            url: 'https://www.hellofresh.be/gift',
         },
         {
             name: 'Pizza set',
             url: 'https://www.bol.com/nl/p/tristar-pz-9154-pizza-festa-4-pizza-gourmetset/9200000131445037',
         },
         {
-            name: 'Nespresso Machine',
-            url: 'https://www.coolblue.be/nl/product/832739/magimix-nespresso-essenza-mini-zwart.html',
+            name: 'Arduino Starter Kit',
+            url: 'https://www.bol.com/nl/p/arduino-starter-kit/9200000058177387/',
         },
-        { 
-            name: 'Wijn abbonement',
-            url: 'https://ourdailybottle.com/pages/gifting',
-        }
+        {
+            name: 'Raspberry Pi Kit',
+            url: 'https://www.sossolutions.nl/retro-game-console-emulator-met-raspberry-pi-4-model-b-2gb-4gb',
+        },
+        {
+            name: 'Voetbaltruitje Rode Duivels',
+            url: 'https://shop.rbfa.be/match/home',
+        },
+        {
+            name: 'Disney+ jaarabonnement',
+            url: 'https://www.disneyplus.com/en-be',
+        },
+        {
+            name: 'Skateboard',
+            url: 'https://www.stokedboardshop.be/products/helvetica-neue-aqua-8-0-complete-skateboard',
+        },
+        {
+            name: 'Lego - Gift card',
+            url: 'https://www.lego.com/en-us/page/static/gift-cards/give/physical',
+        },
+        {
+            name: 'Logitech Wireless Mouse',
+            url: 'https://www.logitech.com/en-us/products/mice/mx-master-3-mac-wireless-mouse.910-005693.html',
+        },
+        {
+            name: 'The Jane (2p) - Waarde-bon',
+            url: 'https://www.thejaneantwerp.com/eng/shop',
+            big: true,
+        },
+        {
+            name: 'Dinner on the lake',
+            url: 'https://dinneronthelake.com/reservations',
+            big: true,
+        },
+        {
+            name: 'Ikea - Waardebon',
+            url: 'https://www.ikea.com/be/nl/customer-service/shopping-at-ikea/ikea-cadeaupas-pub6f712fb1',
+            big: true,
+        },
+        {
+            name: 'Coolblue - Waardebon',
+            url: 'https://www.coolblue.be/nl/cadeaubonnen/prijs:-250?sorteren=hoogste-prijs',
+            big: true,
+        },
+        {
+            name: 'Nintendo Switch',
+            big: true,
+            url: 'https://www.bol.com/nl/p/nintendo-switch-lite-console-grijs/9200000116374158',
+        },
+        {
+            name: 'Tafeltennis tafel',
+            url: 'https://www.bol.com/nl/p/buffalo-basic-indoor-tafeltennis-tafel-blauw/9200000022086363',
+            big: true,
+        },
     ],
     extraQuestion: 'Zet zoveel mogelijk wasknijpers op jullie gezicht',
 }
@@ -219,6 +285,16 @@ const superJackpot = {
             url: 'https://www.coolblue.be/nl/product/865866/playstation-5.html',
         },
         {
+            name: 'VR Bril',
+            big: true,
+            url: 'https://www.coolblue.nl/product/867994/oculus-quest-2-256gb.html',
+        },
+        {
+            name: 'Elektrische step',
+            big: true,
+            url: 'https://www.mediamarkt.nl/nl/product/_pro-mounts-urbmob-f9-1670674.html',
+        },
+        {
             name: 'Opblaasbare Jacuzzi',
             big: true,
             url: 'https://www.toppy.nl/product/14486/1177/spa/opblaasbare-jacuzzi/netspa-canyon-opblaasbare-jacuzzi-4-persoons.html',
@@ -232,16 +308,24 @@ const superJackpot = {
             url: 'https://www.alpacaboerderij.be/activiteit/4/Korte-Alpacawandeling',
         },
         {
-            name: 'Bongobon: Glamping',
-            url: 'https://www.bongo.be/nl/cadeaubonnen/weekendje-weg-overnachten/glamping-884583.html',
+            name: 'Blue Yeti Mic',
+            url: 'https://www.coolblue.be/nl/product/754197/blue-yeti-blackout.html',
+        },
+        {
+            name: 'Good Beer Spa - Gift card',
+            url: 'https://goodbeerspa.com/shop/giftvoucher-for-a-beer-spa-session-for-2-people-in-1-jacuzzi/',
         },
         { 
             name: 'JBL Bluetooth speakers',
             url: 'https://www.coolblue.be/nl/product/818429/jbl-charge-4-zwart.html',
         },
         {
-            name: 'Good Beer Spa - Gift card',
-            url: 'https://goodbeerspa.com/shop/giftvoucher-for-a-beer-spa-session-for-2-people-in-1-jacuzzi/',
+            name: 'Luxe boottocht in Gent (10pers)',
+            url: 'https://www.minervaboten.be/en/gift-voucher/',
+        },
+        {
+            name: 'Bongobon: Glamping',
+            url: 'https://www.bongo.be/nl/cadeaubonnen/weekendje-weg-overnachten/glamping-884583.html',
         },
     ],
 };

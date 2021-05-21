@@ -51,9 +51,9 @@
 
 .ball {
     animation: popIn 500ms linear backwards;
-    background-image: linear-gradient(var(--color-orange), var(--color-yellow));
+    background-image: linear-gradient(var(--color1), var(--color2));
     border-radius: 50%;
-    box-shadow: 0 2px var(--color-orange);
+    box-shadow: 0 2px var(--color1);
     color: var(--color-white);
     cursor: default;
     flex-shrink: 0;
@@ -68,6 +68,34 @@
     transition: top 500ms linear;
     position: absolute;
     top: var(--top);
+}
+
+.ball1 {
+    --color1: #0c7efe;
+    --color2: #4b9ffe;
+}
+
+.ball2 {
+    --color1: red;
+    --color2: #ec9090;
+}
+
+.ball3 {
+    --color1: #dfddcc;
+    --color2: var(--color-white);
+    text-shadow: none;
+
+    color: black;
+}
+
+.ball4 {
+    --color1: green;;
+    --color2: #00ce00;
+}
+
+.ball5 {
+    --color1: var(--color-yellow);
+    --color2: var(--color-orange);
 }
 
 @keyframes popIn {

@@ -1,4 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
+import classNames from 'classnames';
+
 import { firebase } from '../../initFirebase';
 
 import styles from './Balls.module.css';
@@ -30,7 +32,17 @@ export default function Balls() {
         <div className={styles.balls}>
             <div className={styles.ballsInner} ref={innerRef}>
                 { balls && balls.map((ball, index) => (
-                    <div key={ball.key} className={styles.ball} style={{ '--top': `${5 + (45 * index)}px` }}>
+                    <div 
+                        key={ball.key} 
+                        className={classNames(styles.ball, {
+                            [styles.ball1]: ball.value <= 15,
+                            [styles.ball2]: ball.value > 15 && ball.value <= 30,
+                            [styles.ball3]: ball.value > 30 && ball.value <= 45,
+                            [styles.ball4]: ball.value > 45 && ball.value <= 60,
+                            [styles.ball5]: ball.value > 60 && ball.value <= 75,
+                        })} 
+                        style={{ '--top': `${5 + (45 * index)}px` }}
+                    >
                             {ball.value}
                         </div>
                     ))}
