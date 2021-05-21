@@ -13,6 +13,7 @@ import Bingo from '../../src/components/Bingo';
 import Button from '../../src/components/Button';
 import ExtraPrice from '../../src/components/ExtraPrice';
 import Grid from '../../src/components/Grid';
+import Countdown from '../../src/components/Countdown';
 import Shape, { SHAPES }from '../../src/components/Shape';
 
 const db = firebase.database();
