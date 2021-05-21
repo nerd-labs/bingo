@@ -193,7 +193,7 @@ export default function Home() {
                             <div className={styles.shapes}>
                                 { config.activeRange.rank && [...Array(6).keys()].map((r, i) => {
                                     const { rank, round } = config.activeRange;
-                                    const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
+                                    const shape = SHAPES[`SHAPE_${rank + 1}_${round}_${i + 1}`];
 
                                     return shape && <Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
                                 })}

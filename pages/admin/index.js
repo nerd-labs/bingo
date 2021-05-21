@@ -140,7 +140,7 @@ export default function Admin() {
     }
 
     function declineShape(index, user) {
-        const userKey = shapesRef.current.child(`${index}/users/${user.key}`);
+        const userKey = shapesRef.current.child(`${index + 1}/users/${user.key}`);
         userKey.remove();
 
         addLog(`Admin heeft vorm ${index + 1} van ${user.name} geweigerd`);
