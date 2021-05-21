@@ -40,12 +40,12 @@ export default function Home() {
     });
 
     useEffect(() => {
-        bingoRef.current.on('child_added', (snapshot) => {
+        bingoRef.current.on('child_added', () => {
             setHasBingo(true)
         });
 
         bingoRef.current.on('child_removed', (snapshot) => {
-            if (snapshot.val().userId === user.key) {
+            if (snapshot.val().userId === user?.key) {
                 setClickedBingo(false);
             }
         });
@@ -102,11 +102,7 @@ export default function Home() {
                 return shape.users && Object.values(shape.users).some((u) => u.userId === user?.key);
             }));
 
-            if (value.some((shape) => shape.enabled && shape.users)) {
-                setHasShape(true);
-            } else {
-                setHasShape(false);
-            }
+            setHasShape(value.some((shape) => shape.enabled && shape.users));
         });
 
         return () => {
