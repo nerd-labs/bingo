@@ -54,8 +54,6 @@ export default function Countdown({ onEnd }) {
     const nextDrawDate = useRef();
     const interval = useRef();
 
-    console.log('COUNT');
-
     useEffect(() => {
         countdownRef.current.on('value', (snapshot) => {
             setDrawTime(snapshot.val());
