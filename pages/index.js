@@ -33,6 +33,9 @@ export default function Home() {
     const shapesRef = useRef(db.ref('shapes'));
 
     const hasExtraPrice = useMemo(() => config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
+    const showCountdown = useMemo(() => config.activeRange.round === 3, [config.activeRange.round]);
+
+    console.log({ showCountdown });
 
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {
@@ -160,6 +163,12 @@ export default function Home() {
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
 
+                { showCountdown && (
+                    <div className={styles.countdown}>
+                        <Countdown /> 
+                    </div>
+                )}
+
                 { (clickedBingo || clickedShape ) && (
                     <div className={styles.qrCode}>
                         Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
@@ -167,7 +176,7 @@ export default function Home() {
                     </div>
                 )}
 
-                { !clickedBingo && !clickedShape && (
+                { !showCountdown && !clickedBingo && !clickedShape && (
                     <div className={styles.bingo}>
                         <div className={styles.bingoWrapper}>
                             <div className={styles.shapes}>

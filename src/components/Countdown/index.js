@@ -54,13 +54,17 @@ export default function Countdown({ onEnd }) {
     const nextDrawDate = useRef();
     const interval = useRef();
 
+    console.log('COUNT');
+
     useEffect(() => {
         countdownRef.current.on('value', (snapshot) => {
             setDrawTime(snapshot.val());
         });
+
     }, []);
 
     useEffect(() => {
+        console.log({ drawTime });
         if (!drawTime) return undefined;
 
         // calculate the next full second
