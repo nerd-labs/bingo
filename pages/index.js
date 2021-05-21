@@ -26,7 +26,7 @@ export default function Home() {
     const [, addLog] = useLogs();
 
     const bingoRef = useRef(db.ref('bingo'));
-    const shapesRef = useRef(db.ref('shapess'));
+    const shapesRef = useRef(db.ref('shapes'));
 
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {

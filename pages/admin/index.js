@@ -28,7 +28,7 @@ export default function Admin() {
     const usersRef = useRef(db.ref('users'));
     const ballsRef = useRef(db.ref('balls'));
     const bingoRef = useRef(db.ref('bingo'));
-    const shapesRef = useRef(db.ref('shapess'));
+    const shapesRef = useRef(db.ref('shapes'));
 
     function toDate(timestamp) {
         return new Date(timestamp).toLocaleString();
