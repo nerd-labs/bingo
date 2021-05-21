@@ -1,14 +1,34 @@
+.loading, 
+.noActiveGame {
+    color: var(--color-white);
+    text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.loading {
+    font-size: 40px;
+}
+
+.noActiveGame h1 {
+    font-size: 50px;
+}
+
+.noActiveGame p {
+    font-size: 30px;
+}
+
 .welcome {
     align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 100vh;
+    width: 700px;
+    max-width: 100%;
 }
 
 .title {
     background-image: linear-gradient(var(--color-yellow), var(--color-orange));
-    border-radius: 33px;
+    border-radius: 41px;
     box-shadow: 0 10px 0 0 rgba(0,0,0,.3);
     display: inline-block;
     font-size: 30px;
@@ -21,13 +41,15 @@
     background-image: radial-gradient(var(--color-red), var(--color-bordeaux));
     border: none;
     border-bottom: 1px solid var(--color-red);
-    border-radius: 25px;
+    border-radius: 33px;
     box-shadow: inset 0 0 8px rgba(0,0,0,.3);
     color: var(--color-white);
     outline: none;
-    height: 50px;
+    font-size: 25px;
+    height: 66px;
+    padding-top: 10px; 
     line-height: 55px;
-    padding: 0 20px;
+    padding: 10px 20px 0;
     text-shadow: 0 0 4px rgba(0, 0, 0, .5);
     min-width: 300px;
 }
@@ -36,12 +58,28 @@
     color: var(--color-white);
     font-size: 40px;
     text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
-
+    margin: 0;
 }
 
 .button {
-    --size: 40px;
+    --size: 60px !important;
 
-    margin-top: 40px;
-    width: auto;
+    display: block;
+    margin: 40px auto;
+    width: auto !important;
+}
+
+.logoImage {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 50px;
+}
+
+.content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    justify-content: center;
+    text-align: center;
 }

@@ -1,196 +1,119 @@
-import styles from '../styles/Home.module.css'
-import classNames from 'classnames';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
-import useConfig from '../src/hooks/useConfig';
-import useLogs from '../src/hooks/useLogs';
-
-import Balls from '../src/components/Balls';
-import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
-import ExtraPrice from '../src/components/ExtraPrice';
-import Grid from '../src/components/Grid';
-import Shape, { SHAPES }from '../src/components/Shape';
+
+import styles from './Index.module.css';
 
 const db = firebase.database();
 
-export default function Home() {
+function Welcome() {
     const router = useRouter()
-    const [hasShape, setHasShape] = useState(false);
-    const [hasBingo, setHasBingo] = useState(false);
-    const [clickedBingo, setClickedBingo] = useState(false);
-    const [clickedShape, setClickedShape] = useState(false);
+
+    const [hasActiveGame, setHasActiveGame] = useState(false);
     const [user, setUser] = useState();
-    const [pickedShapes, setPickedShapes] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [name, setName] = useState('');
 
-    const config = useConfig();
-    const [, addLog] = useLogs();
+    const ranksRef = useRef(db.ref('ranks'));
+    const usersRef = useRef(db.ref('users'));
 
-    const bingoRef = useRef(db.ref('bingo'));
-    const shapesRef = useRef(db.ref('shapes'));
-
-    const hasExtraPrice = useMemo(() => config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
-
-    const [userId] = useState(() => {
+    const [userId, setUserId] = useState(() => {
         if (typeof window !== "undefined") {
             return localStorage.getItem('bingo.euri.com');
         }
     });
 
     useEffect(() => {
-        bingoRef.current.on('child_added', () => {
-            setHasBingo(true)
-        });
-
-        bingoRef.current.on('child_removed', (snapshot) => {
-            if (snapshot.val().userId === user?.key) {
-                setClickedBingo(false);
-            }
-        });
-
-        bingoRef.current.on('value', (snapshot) => {
-            const value = snapshot.val();
-
-            if (!value) {
-                setHasBingo(false);
-                setClickedBingo(false);
-                return;
-            }
-
-            setClickedBingo(Object.values(value).some((bingo) => bingo.userId === user?.key));
-        });
-
-        return () => {
-            bingoRef.current.off();
-        };
-    }, [user])
+        console.log(hasActiveGame);
+        if (hasActiveGame && user && !isLoading) return router.push('/game');
+    }, [hasActiveGame]);
 
     useEffect(() => {
-        async function getIp() {
-            const us = db.ref(`users/${userId}`);
-            const snapshot = await us.once('value');
+        async function getUser() {
+            if (!userId) return;
+
+            const snapshot = await usersRef.current.child(userId).once('value');
             const value = snapshot.val();
 
-
             if (!value) {
-                router.push('/welcome');
                 return;
             }
 
             setUser(value);
         }
 
-        getIp();
+        getUser();
+    }, [userId]);
+
+    useEffect(() => {
+        ranksRef.current.on('value', (snapshot) => {
+            const value = snapshot.val();
+
+            setHasActiveGame(value?.some((rank) => rank.active));
+        });
     }, []);
 
     useEffect(() => {
-        shapesRef.current.on('value', (snapshot) => {
-            const value = snapshot.val();
-
-            if (!value) {
-                setClickedShape(false);
-                setHasShape(false);
-                return;
-            }
-
-            setPickedShapes(value.map(s => !s.enabled));
-
-
-            setClickedShape(value.some((shape) => {
-                return shape.users && Object.values(shape.users).some((u) => u.userId === user?.key);
-            }));
-
-            setHasShape(value.some((shape) => shape.enabled && shape.users));
-        });
-
-        return () => {
-            shapesRef.current.off();
-        };
+        if (user && !name) setName(user.name);
     }, [user]);
 
-    function bingo() {
-        const newBingo = bingoRef.current.push();
-        newBingo.set({
-            userId: userId,
-            name: user.name,
-            bingo: Date.now(),
-            key: newBingo.key,
-        });
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 4000);
+    }, []);
 
-        addLog(`${user.name} clicked bingo!`);
-        setClickedBingo(true);
+    async function addUser(e) {
+        e.preventDefault();
+
+        if (user) {
+            db.ref(`users/${userId}`).update({ name });
+        } else {
+            const usersRef = db.ref('users');
+            const newUser = usersRef.push();
+
+            newUser.set({
+                name,
+                key: newUser.key,
+            });
+
+            localStorage.setItem('bingo.euri.com', newUser.key);
+            setUserId(newUser.key);
+        }
+
+        if (hasActiveGame) router.push('/game');
     }
-
-    function shapeClicked(index) {
-        const child = shapesRef.current.child(`${index}/users`);
-        const newShape = child.push();
-
-        newShape.set({
-            userId,
-            name: user.name,
-            time: Date.now(),
-            key: newShape.key,
-        });
-
-        addLog(`${user.name} heeft geklikt op vorm ${index + 1}`);
-        setClickedShape(true);
-    }
-
-    if (!user) return null;
 
     return (
-        <>
-            <div className={classNames(
-                styles.page,
-                {
-                    [styles.hasExtraPrice]: hasExtraPrice,
-                }
-            )}>
-                <h1 className={styles.fam}>Welkom: { user.name }</h1>
-                <div className={styles.grid}>
-                    <Grid />
-                </div>
-                <div className={styles.balls}>
-                    <Balls />
-                </div>
-                <div className={styles.logo}>
-                    <img src="/logo.png" className={styles.logoImage} alt="logo" />
-                </div>
-                
-                { (clickedBingo || clickedShape ) && (
-                    <div className={styles.qrCode}>
-                        Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
-                        <img src="./qr.png" alt="qr code" />
+        <div className={styles.welcome}>
+            <img src="/logo.png" className={styles.logoImage} alt="logo" />
+
+            <div className={styles.content}>
+                { isLoading && <h1 className={styles.loading}>Spel aan het laden....</h1> }
+
+                { user && !isLoading && (
+                    <div className={styles.noActiveGame}>
+                        <h1>Welkom {user?.name}</h1>
+                        <p>Nog even geduld! We starten zo dadelijk!</p>
                     </div>
                 )}
 
-                { !clickedBingo && !clickedShape && (
-                    <div className={styles.bingo}>
-                        <div className={styles.bingoWrapper}>
-                            <div className={styles.shapes}>
-                                { config.activeRange.rank && [...Array(6).keys()].map((r, i) => {
-                                    const { rank, round } = config.activeRange;
-                                    const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
-
-                                    return shape && <Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
-                                })}
-                            </div>
-                            <Button text='BINGO' onClick={() => bingo() } />
+                { !user && !isLoading && (
+                    <form onSubmit={addUser}>
+                        <p className={styles.label}>Naam: </p>
+                        <div className={styles.title}>
+                            <input className={styles.titleInner} value={name} onChange={(e) => setName(e.target.value)}/>
                         </div>
-                    </div>
+
+                        <Button className={styles.button}  text='Verstuur' type="submit" onClick={addUser} />
+                    </form>
                 )}
 
-                <div className={styles.extraPrice}>
-                    { hasExtraPrice && (
-                        <ExtraPrice text={config.levelConfig.extraQuestion} /> 
-                    )}
-                </div>
             </div>
-
-            { hasShape && <Bingo secondary text={'FIGUUR'} /> }
-            { hasBingo && <Bingo text={'BINGO'} /> }
-        </>
-    )
+        </div>
+    );
 }
+
+export default Welcome;
