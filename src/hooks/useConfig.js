@@ -13,32 +13,39 @@ export default function useConfig() {
         const ref = db.ref('ranks');
 
         ref.on("value", (snapshot) => {
-            const range = snapshot.val().find((obj) => obj && obj.active);
-            setActiveRange(range || {});
+            const value = snapshot.val();
 
-            let rang = null;
+            if (value) {
+                const range = value.find((obj) => obj && obj.active);
+                setActiveRange(range || {});
 
-            if (range) {
-                switch(range.label) {
-                    case 'Rang 1':
-                        rang = 'level1';
-                        break;
-                    case 'Rang 2':
-                        rang = 'level2';
-                        break;
-                    case 'Rang 3':
-                        rang = 'level3';
-                        break;
-                    case 'Super Jackpot':
-                        rang = 'superJackpot';
-                        break;
-                    default:
-                        break;
+                let rang = null;
+
+                if (range) {
+                    switch(range.label) {
+                        case 'Rang 1':
+                            rang = 'level1';
+                            break;
+                        case 'Rang 2':
+                            rang = 'level2';
+                            break;
+                        case 'Rang 3':
+                            rang = 'level3';
+                            break;
+                        case 'Super Jackpot':
+                            rang = 'superJackpot';
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
 
-            if (config[rang]) setLevelConfig(config[rang]);
-            else setLevelConfig({});
+                if (config[rang]) setLevelConfig(config[rang]);
+                else setLevelConfig({});
+            } else { 
+                setLevelConfig({});
+                setActiveRange({});
+            }
         });
 
         return () => {

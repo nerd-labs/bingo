@@ -3,10 +3,11 @@ import classNames from 'classnames';
 
 import Shape, { SHAPES } from '../../src/components/Shape';
 
-import styles from '../../styles/Admin.module.css'
 import { firebase } from '../../src/initFirebase';
 import useConfig from '../../src/hooks/useConfig';
 import useLogs from '../../src/hooks/useLogs';
+
+import styles from './Admin.module.css'
 
 const db = firebase.database();
 
@@ -16,6 +17,7 @@ export default function Admin() {
 
     const [ballValue, setBallValue] = useState('');
     const [priceRanks, setPriceRanks] = useState();
+    const [hasActiveGame, setHasActiveGame] = useState(false);
     const [users, setUsers] = useState([]);
     const [balls, setBalls] = useState([]);
     const [bingo, setBingo] = useState([]);
@@ -51,7 +53,10 @@ export default function Admin() {
     }
 
     useEffect(() => {
-        ranksRef.current.on("value", (snapshot) => {
+        ranksRef.current.on('value', (snapshot) => {
+            const value = snapshot.val();
+
+            setHasActiveGame(value?.some((rank) => rank.active));
             setPriceRanks(snapshot.val());
         });
 
@@ -176,6 +181,29 @@ export default function Admin() {
         shapesRef.current.set(newShapes);
     }
 
+    function startFreshGame() {
+        const confirmed = confirm('Ben je zeker?');
+        if (!confirmed) return;
+
+        db.ref('ranks').remove();
+
+        ['Rang 1', 'Rang 2', 'Rang3', 'Super Jackpot'].forEach((label, key) => {
+            db.ref(`ranks/${key + 1}`).set({
+                label,
+                rank: key + 1,
+                active: key === 0,
+                round: 1
+            });
+        });
+
+        db.ref('logs').remove();
+        ballsRef.current.remove();
+        clearShapes();
+
+        addLog(`Nieuwe spel gestart.`, true);
+        addLog(`Nieuwe ronde gestart: rang 1, ronde 1`, true);
+    }
+
     function changeActiveRound() {
         const confirmed = confirm('Ben je zeker?');
         if (!confirmed) return;
@@ -219,7 +247,7 @@ export default function Admin() {
             countdownRef.current.remove();
         }
 
-        addLog(`Nieuw spel gestart: rang ${newRank}, ronde ${newRound}`, true);
+        addLog(`Nieuwe ronde gestart: rang ${newRank}, ronde ${newRound}`, true);
     }
 
     return (
@@ -243,17 +271,18 @@ export default function Admin() {
                     <div className={styles.shapes}>
                         { config.activeRange.rank && shapes.map((r, i) => {
                             const { rank, round } = config.activeRange;
-                            const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
+                            const key = `SHAPE_${rank}_${round}_${i + 1}`;
+                            const shape = SHAPES[key];
 
                             return shape && (
                                 <>
                                     <Shape 
-                                        key={i} 
-                                        shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} 
+                                        key={key} 
+                                        shape={shape} 
                                         disabled={shapes[i].enabled} 
                                     />
 
-                                    <div className={styles.shapeWrapper}>
+                                    <div className={styles.shapeWrapper} key={`${key}-2`}>
                                         { shapes[i].users && 
                                         <>
                                             <div> {shapes[i].users[0].name} - { toDate(shapes[i].users[0].time) }</div>
@@ -286,7 +315,7 @@ export default function Admin() {
                     <>
                         <p className={styles.activeRound}>
                             {config.activeRange && config.activeRange.label} 
-                            {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
+                            {config.activeRange && config.activeRange.round && config.activeRange.rank !== 4 && ` - Ronde ${config.activeRange.round}`} 
                         </p>
 
                         { config.activeRange.rank < MAX_RANKS && (
@@ -297,7 +326,14 @@ export default function Admin() {
                                 Start nieuwe {config.activeRange.round < MAX_ROUNDS ? 'ronde' : 'rang'}
                             </button>
                         )}
+
                     </>
+                )}
+
+                { (!hasActiveGame || config.activeRange.rank === MAX_RANKS) && (
+                    <button className={styles.button} onClick={startFreshGame}>
+                        Start nieuwe bingo
+                    </button>
                 )}
             </div>
 
@@ -305,16 +341,18 @@ export default function Admin() {
                 <div className={styles.formBlock}>
                     <h1 className={styles.title}>Getrokken Ballen</h1>
 
-                    <form onSubmit={submitNumber}>
-                        <input 
-                            className={styles.input} 
-                            name="range" 
-                            value={ballValue} 
-                            onChange={(e) => setBallValue(e.target.value)} 
-                        />
+                    { hasActiveGame && (
+                        <form onSubmit={submitNumber}>
+                            <input 
+                                className={styles.input} 
+                                name="range" 
+                                value={ballValue} 
+                                onChange={(e) => setBallValue(e.target.value)} 
+                            />
 
-                        <button type="submit" className={styles.button}>Toevoegen</button>
-                    </form>
+                            <button type="submit" className={styles.button}>Toevoegen</button>
+                        </form>
+                    )}
 
                     <div className={styles.drawBalls}>
                         {
