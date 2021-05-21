@@ -192,8 +192,6 @@ export default function Admin() {
         const confirmed = confirm('Ben je zeker?');
         if (!confirmed) return;
 
-        // db.ref('ranks').remove();
-
         ['Rang 1', 'Rang 2', 'Rang 3', 'Super Jackpot'].forEach((label, key) => {
             db.ref(`ranks/${key}`).set({
                 label,
