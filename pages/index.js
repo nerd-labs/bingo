@@ -22,7 +22,6 @@ export default function Home() {
     const [user, setUser] = useState();
     const [pickedShapes, setPickedShapes] = useState([]);
 
-
     const config = useConfig();
     const [, addLog] = useLogs();
 
