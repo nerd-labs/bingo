@@ -43,11 +43,25 @@ export default function Home() {
 
     useEffect(() => {
         bingoRef.current.on('child_added', () => {
-            setHasBingo(true);
+            setHasBingo(true)
+        });
+
+        bingoRef.current.on('child_removed', (snapshot) => {
+            if (snapshot.val().userId === user?.key) {
+                setClickedBingo(false);
+            }
         });
 
         bingoRef.current.on('value', (snapshot) => {
-            if (!snapshot.val()) setHasBingo(false);
+            const value = snapshot.val();
+
+            if (!value) {
+                setHasBingo(false);
+                setClickedBingo(false);
+                return;
+            }
+
+            setClickedBingo(Object.values(value).some((bingo) => bingo.userId === user?.key));
         });
 
         return () => {
@@ -108,6 +122,7 @@ export default function Home() {
         });
 
         addLog(`${user.name} clicked bingo!`);
+        setClickedBingo(true);
     }
 
     function shapeClicked(index) {
