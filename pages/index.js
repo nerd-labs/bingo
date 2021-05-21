@@ -22,6 +22,7 @@ export default function Home() {
     const [user, setUser] = useState();
     const [pickedShapes, setPickedShapes] = useState([]);
 
+
     const config = useConfig();
     const [, addLog] = useLogs();
 
@@ -35,6 +36,7 @@ export default function Home() {
     });
 
     useEffect(() => {
+
         bingoRef.current.on('child_added', () => {
             setHasBingo(true);
         });
@@ -104,6 +106,11 @@ export default function Home() {
 
     function hasExtraPrice() {
         return !!config?.levelConfig?.extraQuestion;
+    }
+
+    function sound() {
+        console.log('playCountdown');
+        playCountdown();
     }
 
     if (!user) return null;
