@@ -23,7 +23,7 @@ export default function useConfig() {
     useEffect(() => {
         logsRef.current.on("value", (snapshot) => {
             const value = snapshot.val();
-            if (value) setLogs(Object.values(value));
+            if (value) setLogs(Object.values(value).reverse());
         });
 
         return () => {

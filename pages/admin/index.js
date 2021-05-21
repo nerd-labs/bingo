@@ -96,7 +96,15 @@ export default function Admin() {
 
     useEffect(() => {
         shapesRef.current.on("value", (snapshot) => {
-            setShapes(snapshot.val());
+            const value = snapshot.val();
+            if (value) {
+                setShapes(value.map(v => ({
+                    ...v,
+                    users: v.users ? Object.values(v.users).sort((a, b) => a.time - b.time) : undefined,
+                })));
+            } else {
+                setShapes([]);
+            }
         });
 
         return () => {
@@ -107,22 +115,29 @@ export default function Admin() {
     function accept(bingo) {
         bingoRef.current.remove();
 
-        addLog(`Admin approved the bingo of ${bingo.name}!`);
+        addLog(`Admin heeft de bingo van ${bingo.name} aanvaard!`);
     }
 
     function decline(bingo) {
         const bingoKey = db.ref(`bingo/${bingo.key}`);
         bingoKey.remove();
 
-        addLog(`Admin declined the bingo of ${bingo.name}!`);
+        addLog(`Admin heeft de bingo van ${bingo.name} geweigerd`);
     }
 
-    function shapeClicked(index) {
-        shapesRef.current.update({
-            [index]: false
+    function acceptShape(index, user) {
+        shapesRef.current.child(index).set({
+            enabled: false,
         });
 
-        addLog(`Admin enabled shape ${index + 1}`);
+        addLog(`Admin heeft vorm ${index + 1} van ${user.name} aanvaard!`);
+    }
+
+    function declineShape(index, user) {
+        const userKey = shapesRef.current.child(`${index}/users/${user.key}`);
+        userKey.remove();
+
+        addLog(`Admin heeft vorm ${index + 1} van ${user.name} geweigerd`);
     }
 
     function submitNumber(e) {
@@ -134,8 +149,8 @@ export default function Admin() {
 
         if (ballValue > 75) return alert('Dit nummer is te hoog');
 
-        const confirmmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
-        if (!confirmmed) return;
+        const confirmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
+        if (!confirmed) return;
 
         const newBallRef = ballsRef.current.push();
         newBallRef.set({
@@ -146,12 +161,26 @@ export default function Admin() {
         setBallValue('')
     }
 
+    function clearShapes() {
+        shapesRef.current.remove();
+
+        const newShapes = [];
+
+        for (let i = 0; i < 6; i++) {
+            newShapes.push({
+                enabled: true,
+            });
+        }
+
+        shapesRef.current.set(newShapes);
+    }
+
     function changeActiveRound() {
-        const confirmmed = confirm("Ben je zeker?");
-        if (!confirmmed) return;
+        const confirmed = confirm('Ben je zeker?');
+        if (!confirmed) return;
 
         ballsRef.current.remove();
-        shapesRef.current.set([false, false, false, false, false]);
+        clearShapes();
 
         if (config.activeRange.round < 3) {
             db.ref(`ranks/${config.activeRange.rank}`).update({
@@ -169,15 +198,63 @@ export default function Admin() {
         }
     }
 
-    console.log('test', { config });
-
     return (
         <main className={styles.admin}>
-            <div className={styles.content}>
-                { priceRanks && (
-                    <div className={classNames(styles.formBlock, styles.ranks)}>
-                        <h1 className={styles.title}>Actieve rang / ronde</h1>
+            <div className={styles.formBlock}>
+                <h1 className={styles.title}>Families met bingo</h1>
 
+                { bingo[0] && (
+                    <div>
+                        <p> {bingo[0].name} - { toDate(bingo[0].bingo) }</p>
+                        <button className={styles.button} onClick={() => accept(bingo[0])}>Correct</button>
+                        <button className={classNames(styles.button, styles.buttonDecline)} onClick={() => decline(bingo[0])}>Foutief</button>
+                    </div> 
+                )}
+            </div>
+
+            <div className={styles.formBlock}>
+                <h1 className={styles.title}>Figuren</h1>
+
+                { shapes.length && (
+                    <div className={styles.shapes}>
+                        { config?.activeRange && [...Array(6).keys()].map((r, i) => (
+                            <>
+                                <Shape 
+                                    key={i} 
+                                    shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} 
+                                    disabled={shapes[i].enabled} 
+                                />
+
+                                <div>
+                                    { shapes[i].users && 
+                                    <>
+                                        <div> {shapes[i].users[0].name} - { toDate(shapes[i].users[0].time) }</div>
+                                        <button 
+                                            className={styles.button} 
+                                            onClick={() => acceptShape(i, shapes[i].users[0])}
+                                        >
+                                            Correct
+                                        </button>
+                                        <button 
+                                            className={classNames(styles.button, styles.buttonDecline)} 
+                                            onClick={() => declineShape(i, shapes[i].users[0])}
+                                        >
+                                            Foutief
+                                        </button>
+                                    </>
+                                    }
+                                </div>
+                            </>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            <div className={classNames(styles.formBlock, styles.ranks)}>
+                <h1 className={styles.title}>Actieve rang / ronde</h1>
+
+                { priceRanks && (
+                    <>
                         <p className={styles.activeRound}>
                             {config.activeRange && config.activeRange.label} 
                             {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
@@ -191,31 +268,7 @@ export default function Admin() {
                                 Start nieuwe {config.activeRange.round < MAX_ROUNDS ? 'ronde' : 'rang'}
                             </button>
                         )}
-                    </div>
-                )}
-
-                { shapes && (
-                    <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Figuren</h1>
-
-                        <div className={styles.shapes}>
-                            { config?.activeRange && [...Array(6).keys()].map((r, i) => (
-                                <Shape key={i} shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                { bingo[0] && (
-                    <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Families met bingo</h1>
-
-                        <div>
-                            <p> {bingo[0].name} - { toDate(bingo[0].bingo) }</p>
-                            <button className={styles.button} onClick={() => accept(bingo[0])}>Correct</button>
-                            <button className={classNames(styles.button, styles.buttonDecline)} onClick={() => decline(bingo[0])}>Foutief</button>
-                        </div> 
-                    </div>
+                    </>
                 )}
             </div>
 
