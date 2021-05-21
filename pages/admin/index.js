@@ -187,10 +187,10 @@ export default function Admin() {
 
         db.ref('ranks').remove();
 
-        ['Rang 1', 'Rang 2', 'Rang3', 'Super Jackpot'].forEach((label, key) => {
+        ['Rang 1', 'Rang 2', 'Rang 3', 'Super Jackpot'].forEach((label, key) => {
             db.ref(`ranks/${key}`).set({
                 label,
-                rank: key + 1,
+                rank: key,
                 active: key === 0,
                 round: 1
             });
