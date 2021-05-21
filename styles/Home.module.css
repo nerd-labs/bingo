@@ -21,6 +21,10 @@
         "extraPrice balls bingo";
 }
 
+/* .hasCountdown .countdown { */
+/*     grid-area: bingo; */
+/* } */
+
 .grid {
     grid-area: grid;
 }
@@ -45,6 +49,10 @@
 
 .logoImage {
     height: 250px;
+}
+
+.countdown {
+    grid-area: bingo;
 }
 
 .bingoWrapper {

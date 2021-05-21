@@ -1,6 +1,6 @@
 import styles from '../styles/Home.module.css'
 import classNames from 'classnames';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
@@ -33,6 +33,9 @@ export default function Home() {
             return localStorage.getItem('bingo.euri.com');
         }
     });
+
+    const hasExtraPrice = useMemo(() => !!config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
+    const hasCountdown = useMemo(() => config.activeRange.round === 3, [config.activeRange.round]);
 
     useEffect(() => {
         bingoRef.current.on('child_added', () => {
@@ -96,18 +99,17 @@ export default function Home() {
         addLog(`${user.name} clicked shape ${index + 1}`);
     }
 
-    function hasExtraPrice() {
-        return !!config?.levelConfig?.extraQuestion;
-    }
-
     if (!user) return null;
+
+    console.log(hasCountdown);
 
     return (
         <>
             <div className={classNames(
                 styles.page,
                 {
-                    [styles.hasExtraPrice]: hasExtraPrice(),
+                    [styles.hasExtraPrice]: hasExtraPrice,
+                    // [styles.hasCountdown]: hasCountdown(),
                 }
             )}>
                 <h1 className={styles.fam}>Welkom: { user.name }</h1>
@@ -120,18 +122,20 @@ export default function Home() {
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
-                <div className={styles.bingo}>
+                { hasCountdown ? <p> countdow</p>  : (
+                    <div className={styles.bingo}>
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
-                            { config?.activeRange && [...Array(6).keys()].map((r, i) => (
+                            { config.activeRange.rank && [...Array(6).keys()].map((r, i) => (
                                 <Shape key={i} shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>
                         <Button text='BINGO' onClick={() => bingo() } />
                     </div>
                 </div>
+                ) }
                 <div className={styles.extraPrice}>
-                    { hasExtraPrice() && (
+                    { hasExtraPrice && (
                         <ExtraPrice text={config.levelConfig.extraQuestion} /> 
                     )}
                 </div>
