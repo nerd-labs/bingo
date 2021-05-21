@@ -86,6 +86,7 @@ export default function Admin() {
         ballsRef.current.on("value", (snapshot) => {
             const value = snapshot.val();
             if (value) setBalls(Object.values(value).sort((a, b) => a.value - b.value));
+            else setBalls([]);
         });
 
         return () => {
@@ -145,6 +146,8 @@ export default function Admin() {
         if (balls && Object.values(balls).some(b => b.value === ballValue)) {
             return alert(`De bal met nummer ${ballValue} is al reeds getrokken!`);
         }
+
+        if (ballValue > 75) return alert('Dit nummer is te hoog');
 
         const confirmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
         if (!confirmed) return;
