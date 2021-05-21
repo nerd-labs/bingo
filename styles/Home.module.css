@@ -21,9 +21,6 @@
         "extraPrice balls bingo";
 }
 
-.clickedBingo .qrCode {
-}
-
 .clickedBingo .bingo {
     display: none;
 }
