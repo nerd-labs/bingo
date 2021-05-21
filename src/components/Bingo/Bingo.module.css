@@ -1,9 +1,9 @@
 .bingo {
     animation: slide 300ms linear both;
     background-image: linear-gradient(
-    var(--color-purple),
-    var(--color-pink),
-    var(--color-purple)
+        var(--color-purple),
+        var(--color-pink),
+        var(--color-purple)
     );
     border-radius: 0 0 20px 20px;
     box-shadow: 0 10px 0 0 rgba(0, 0, 0, 0.3);
