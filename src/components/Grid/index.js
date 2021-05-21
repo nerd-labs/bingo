@@ -31,7 +31,7 @@ export default function Grid({ title }) {
             <div className={styles.title}>
                 <div className={styles.titleInner}>
                         {config.activeRange && config.activeRange.label} 
-                        {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
+                        {config.activeRange && config.activeRange.rank !== 4 && ` - Ronde ${config.activeRange.round}`} 
                 </div>
             </div>
             <div className={styles.gridInner}>

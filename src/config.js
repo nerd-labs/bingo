@@ -1,11 +1,6 @@
 import { SHAPES } from './components/Shape';
 
 const level1 = {
-    rounds: [
-        [SHAPES.E, SHAPES.U, SHAPES.R, SHAPES.I, SHAPES.LOGO],
-        [SHAPES.PLUS, SHAPES.C, SHAPES.O, SHAPES.M, SHAPES.LOGO],
-        [SHAPES.V, SHAPES.U, SHAPES.E, SHAPES.J, SHAPES.S],
-    ],
     prizes: [
         {
             name: '100 mondmaskers',
@@ -77,15 +72,10 @@ const level1 = {
             big: true,
         },
     ],
-    extraQuestion: 'Maak een het langst mogelijke woord met letterkoekjes.',
+    extraQuestion: 'Maak het langst mogelijke woord met letterkoekjes.',
 };
 
 const level2 = {
-    rounds: [
-        [SHAPES.B, SHAPES.I, SHAPES.N, SHAPES.G, SHAPES.O],
-        [SHAPES.N, SHAPES.E, SHAPES.T, SHAPES.J, SHAPES.S],
-        [SHAPES.T, SHAPES.E, SHAPES.A, SHAPES.M, SHAPES.LOGO],
-    ],
     prizes: [
         {
             name: 'Ticket Plopsa-land',
@@ -178,15 +168,10 @@ const level2 = {
             big: true,
         }
     ],
-    extraQuestion: 'Maak de langste worst met een potje Play-Doh.',
+    extraQuestion: 'Maak een zolang mogelijke worst met een potje Play-Doh.',
 };
 
 const level3 = {
-    rounds: [
-        [SHAPES.C, SHAPES.O, SHAPES.R, SHAPES.E, SHAPES.LOGO],
-        [SHAPES.P, SHAPES.O, SHAPES.T, SHAPES.J, SHAPES.E],
-        [SHAPES.R, SHAPES.E, SHAPES.A, SHAPES.C, SHAPES.T],
-    ],
     prizes: [
         {
             name: 'Nintendo Switch',
@@ -222,9 +207,6 @@ const level3 = {
 }
 
 const superJackpot = {
-    rounds: [
-        [SHAPES.S, SHAPES.U, SHAPES.P, SHAPES.E, SHAPES.R],
-    ],
     prizes: [
         {
             name: 'Green Egg BBQ',

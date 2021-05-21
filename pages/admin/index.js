@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import classNames from 'classnames';
 
-import Shape from '../../src/components/Shape';
+import Shape, { SHAPES } from '../../src/components/Shape';
 
 import styles from '../../styles/Admin.module.css'
 import { firebase } from '../../src/initFirebase';
@@ -160,11 +160,13 @@ export default function Admin() {
             });
 
             db.ref(`ranks/${config.activeRange.rank + 1}`).update({
-                round: config.activeRange.rank === 3 ? false : 1,
+                round: 1,
                 active: true,
             });
         }
     }
+
+    console.log('test', { config });
 
     return (
         <main className={styles.admin}>
@@ -194,8 +196,8 @@ export default function Admin() {
                         <h1 className={styles.title}>Figuren</h1>
 
                         <div className={styles.shapes}>
-                            { config && config.activeRange && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
-                                <Shape key={i} shape={r} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
+                            { config?.activeRange && [...Array(6).keys()].map((r, i) => (
+                                <Shape key={i} shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>
                     </div>
