@@ -199,9 +199,12 @@ export default function Admin() {
                         <h1 className={styles.title}>Figuren</h1>
 
                         <div className={styles.shapes}>
-                            { config?.activeRange && [...Array(6).keys()].map((r, i) => (
-                                <Shape key={i} shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
-                            ))}
+                            { config.activeRange.rank && [...Array(6).keys()].map((r, i) => {
+                                const { rank, round } = config.activeRange;
+                                const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
+
+                                return shape &&<Shape key={i} shape={shape} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
+                            })}
                         </div>
                     </div>
                 )}

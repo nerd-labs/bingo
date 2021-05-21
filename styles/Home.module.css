@@ -21,25 +21,8 @@
         "extraPrice balls bingo";
 }
 
-.clickedBingo {
-    grid-template-areas:
-        "grid balls fam"
-        "grid balls logo"
-        "grid balls qrCode"
-        "extraPrice balls qrCode";
-
-}
-
-
-.clickedBingo.hasExtraPrice {
-    grid-template-areas:
-        "grid balls fam"
-        "grid balls logo"
-        "grid balls qrCode"
-        "extraPrice balls qrCode";
-}
-
 .clickedBingo .qrCode {
+    grid-area: bingo;
     align-items: center;
     display: flex;
     flex-direction: column;

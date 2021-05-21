@@ -6,8 +6,8 @@ import config from '../config';
 const db = firebase.database();
 
 export default function useConfig() {
-    const [levelConfig, setLevelConfig] = useState();
-    const [activeRange, setActiveRange] = useState();
+    const [levelConfig, setLevelConfig] = useState({});
+    const [activeRange, setActiveRange] = useState({});
 
     useEffect(() => {
         const ref = db.ref('ranks');

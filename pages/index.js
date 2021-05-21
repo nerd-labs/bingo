@@ -1,6 +1,6 @@
 import styles from '../styles/Home.module.css'
 import classNames from 'classnames';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
@@ -28,6 +28,8 @@ export default function Home() {
 
     const bingoRef = useRef(db.ref('bingo'));
     const shapesRef = useRef(db.ref('shapes'));
+
+    const hasExtraPrice = useMemo(() => config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
 
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {
@@ -107,10 +109,6 @@ export default function Home() {
         addLog(`${user.name} clicked shape ${index + 1}`);
     }
 
-    function hasExtraPrice() {
-        return !!config?.levelConfig?.extraQuestion;
-    }
-
     if (!user) return null;
 
     return (
@@ -118,7 +116,7 @@ export default function Home() {
             <div className={classNames(
                 styles.page,
                 {
-                    [styles.hasExtraPrice]: hasExtraPrice(),
+                    [styles.hasExtraPrice]: hasExtraPrice,
                     [styles.clickedBingo]: clickedBingo,
                 }
             )}>
@@ -136,18 +134,26 @@ export default function Home() {
                     Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
                     <img src="./qr.png" alt="qr code" />
                 </div>
-                <div className={styles.bingo}>
-                    <div className={styles.bingoWrapper}>
-                        <div className={styles.shapes}>
-                            { config?.activeRange && [...Array(6).keys()].map((r, i) => (
-                                <Shape key={i} shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
-                            ))}
+
+
+                { !clickedBingo && (
+                    <div className={styles.bingo}>
+                        <div className={styles.bingoWrapper}>
+                            <div className={styles.shapes}>
+                                { config.activeRange.rank && [...Array(6).keys()].map((r, i) => {
+                                    const { rank, round } = config.activeRange;
+                                    const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
+
+                                    return shape &&<Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
+                                })}
+                            </div>
+                            <Button text='BINGO' onClick={() => bingo() } />
                         </div>
-                        <Button text='BINGO' onClick={() => bingo() } />
                     </div>
-                </div>
+                )}
+
                 <div className={styles.extraPrice}>
-                    { hasExtraPrice() && (
+                    { hasExtraPrice && (
                         <ExtraPrice text={config.levelConfig.extraQuestion} /> 
                     )}
                 </div>
