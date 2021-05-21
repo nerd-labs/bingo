@@ -20,6 +20,22 @@
     z-index: 100;
 }
 
+.secondary {
+    background-image: linear-gradient(
+        green,
+        lightgreen,
+        green
+    );
+    font-size: 200px;
+}
+
+.secondary .bingoInner {
+    background-image: radial-gradient(lightgreen, green);
+    border-bottom: 1px solid lightgreen;
+    height: 280px;
+    width: 800px;
+}
+
 .bingoInner {
     --offset: 0;
     --size: 0;

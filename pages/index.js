@@ -10,7 +10,6 @@ import useLogs from '../src/hooks/useLogs';
 import Balls from '../src/components/Balls';
 import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
-import Countdown from '../src/components/Countdown';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
 import Shape, { SHAPES }from '../src/components/Shape';
@@ -19,8 +18,10 @@ const db = firebase.database();
 
 export default function Home() {
     const router = useRouter()
+    const [hasShape, setHasShape] = useState(false);
     const [hasBingo, setHasBingo] = useState(false);
     const [clickedBingo, setClickedBingo] = useState(false);
+    const [clickedShape, setClickedShape] = useState(false);
     const [user, setUser] = useState();
     const [pickedShapes, setPickedShapes] = useState([]);
 
@@ -40,20 +41,25 @@ export default function Home() {
 
     useEffect(() => {
         bingoRef.current.on('child_added', () => {
-            setHasBingo(true);
+            setHasBingo(true)
         });
 
         bingoRef.current.on('child_removed', (snapshot) => {
-            if (snapshot.val().id === user.key) {
+            if (snapshot.val().userId === user?.key) {
                 setClickedBingo(false);
             }
         });
 
         bingoRef.current.on('value', (snapshot) => {
-            if (!snapshot.val()) {
+            const value = snapshot.val();
+
+            if (!value) {
                 setHasBingo(false);
                 setClickedBingo(false);
+                return;
             }
+
+            setClickedBingo(Object.values(value).some((bingo) => bingo.userId === user?.key));
         });
 
         return () => {
@@ -84,15 +90,19 @@ export default function Home() {
             const value = snapshot.val();
 
             if (!value) {
-                setClickedBingo(false);
+                setClickedShape(false);
+                setHasShape(false);
                 return;
             }
 
             setPickedShapes(value.map(s => !s.enabled));
 
-            setClickedBingo(value.some((shape) => {
+
+            setClickedShape(value.some((shape) => {
                 return shape.users && Object.values(shape.users).some((u) => u.userId === user?.key);
             }));
+
+            setHasShape(value.some((shape) => shape.enabled && shape.users));
         });
 
         return () => {
@@ -125,7 +135,7 @@ export default function Home() {
         });
 
         addLog(`${user.name} heeft geklikt op vorm ${index + 1}`);
-        setClickedBingo(true);
+        setClickedShape(true);
     }
 
     if (!user) return null;
@@ -136,7 +146,6 @@ export default function Home() {
                 styles.page,
                 {
                     [styles.hasExtraPrice]: hasExtraPrice,
-                    [styles.clickedBingo]: clickedBingo,
                 }
             )}>
                 <h1 className={styles.fam}>Welkom: { user.name }</h1>
@@ -149,33 +158,29 @@ export default function Home() {
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
+                
+                { (clickedBingo || clickedShape ) && (
+                    <div className={styles.qrCode}>
+                        Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
+                        <img src="./qr.png" alt="qr code" />
+                    </div>
+                )}
 
-                {/* { clickedBingo && ( */}
-                {/*     <div className={styles.qrCode}> */}
-                {/*         Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp! */}
-                {/*         <img src="./qr.png" alt="qr code" /> */}
-                {/*     </div> */}
-                {/* )} */}
+                { !clickedBingo && !clickedShape && (
+                    <div className={styles.bingo}>
+                        <div className={styles.bingoWrapper}>
+                            <div className={styles.shapes}>
+                                { config.activeRange.rank && [...Array(6).keys()].map((r, i) => {
+                                    const { rank, round } = config.activeRange;
+                                    const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
 
-                <div className="countdown">
-                    <Countdown />
-                </div>
-
-                {/* { !clickedBingo && ( */}
-                {/*     <div className={styles.bingo}> */}
-                {/*         <div className={styles.bingoWrapper}> */}
-                {/*             <div className={styles.shapes}> */}
-                {/*                 { config.activeRange.rank && [...Array(6).keys()].map((r, i) => { */}
-                {/*                     const { rank, round } = config.activeRange; */}
-                {/*                     const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`]; */}
-                {/*  */}
-                {/*                     return shape && <Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} /> */}
-                {/*                 })} */}
-                {/*             </div> */}
-                {/*             <Button text='BINGO' onClick={() => bingo() } /> */}
-                {/*         </div> */}
-                {/*     </div> */}
-                {/* )} */}
+                                    return shape && <Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
+                                })}
+                            </div>
+                            <Button text='BINGO' onClick={() => bingo() } />
+                        </div>
+                    </div>
+                )}
 
                 <div className={styles.extraPrice}>
                     { hasExtraPrice && (
@@ -184,7 +189,8 @@ export default function Home() {
                 </div>
             </div>
 
-            { hasBingo && <Bingo /> }
+            { hasShape && <Bingo secondary text={'FIGUUR'} /> }
+            { hasBingo && <Bingo text={'BINGO'} /> }
         </>
     )
 }
