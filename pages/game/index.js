@@ -47,8 +47,6 @@ export default function Home() {
         ranksRef.current.on('value', (snapshot) => {
             const value = snapshot.val();
 
-            console.log('value', value);
-
             if (!value?.some((rank) => rank.active)) {
                 router.push('/');
                 return;
