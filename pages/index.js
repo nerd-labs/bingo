@@ -10,6 +10,7 @@ import useLogs from '../src/hooks/useLogs';
 import Balls from '../src/components/Balls';
 import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
+import Countdown from '../src/components/Countdown';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
 import Shape, { SHAPES }from '../src/components/Shape';
@@ -58,7 +59,7 @@ export default function Home() {
         return () => {
             bingoRef.current.off();
         };
-    }, [])
+    }, [user])
 
     useEffect(() => {
         async function getIp() {
@@ -148,29 +149,33 @@ export default function Home() {
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
-                
-                { clickedBingo && (
-                    <div className={styles.qrCode}>
-                        Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
-                        <img src="./qr.png" alt="qr code" />
-                    </div>
-                )}
 
-                { !clickedBingo && (
-                    <div className={styles.bingo}>
-                        <div className={styles.bingoWrapper}>
-                            <div className={styles.shapes}>
-                                { config.activeRange.rank && [...Array(6).keys()].map((r, i) => {
-                                    const { rank, round } = config.activeRange;
-                                    const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
+                {/* { clickedBingo && ( */}
+                {/*     <div className={styles.qrCode}> */}
+                {/*         Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp! */}
+                {/*         <img src="./qr.png" alt="qr code" /> */}
+                {/*     </div> */}
+                {/* )} */}
 
-                                    return shape && <Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
-                                })}
-                            </div>
-                            <Button text='BINGO' onClick={() => bingo() } />
-                        </div>
-                    </div>
-                )}
+                <div className="countdown">
+                    <Countdown />
+                </div>
+
+                {/* { !clickedBingo && ( */}
+                {/*     <div className={styles.bingo}> */}
+                {/*         <div className={styles.bingoWrapper}> */}
+                {/*             <div className={styles.shapes}> */}
+                {/*                 { config.activeRange.rank && [...Array(6).keys()].map((r, i) => { */}
+                {/*                     const { rank, round } = config.activeRange; */}
+                {/*                     const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`]; */}
+                {/*  */}
+                {/*                     return shape && <Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} /> */}
+                {/*                 })} */}
+                {/*             </div> */}
+                {/*             <Button text='BINGO' onClick={() => bingo() } /> */}
+                {/*         </div> */}
+                {/*     </div> */}
+                {/* )} */}
 
                 <div className={styles.extraPrice}>
                     { hasExtraPrice && (

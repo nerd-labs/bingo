@@ -37,6 +37,10 @@
     text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
 }
 
+.countdown {
+    grid-area: bingo;
+}
+
 .qrCode img {
     border-radius: 10px;
     height: 200px;
