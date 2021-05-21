@@ -80,13 +80,24 @@ export default function Home() {
 
     useEffect(() => {
         shapesRef.current.on('value', (snapshot) => {
-            setPickedShapes(snapshot.val().map(s => !s.enabled));
+            const value = snapshot.val();
+
+            if (!value) {
+                setClickedBingo(false);
+                return;
+            }
+
+            setPickedShapes(value.map(s => !s.enabled));
+
+            setClickedBingo(value.some((shape) => {
+                return shape.users && Object.values(shape.users).some((u) => u.userId === user?.key);
+            }));
         });
 
         return () => {
             shapesRef.current.off();
         };
-    }, []);
+    }, [user]);
 
     function bingo() {
         const newBingo = bingoRef.current.push();
@@ -113,6 +124,7 @@ export default function Home() {
         });
 
         addLog(`${user.name} heeft geklikt op vorm ${index + 1}`);
+        setClickedBingo(true);
     }
 
     if (!user) return null;
