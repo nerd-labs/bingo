@@ -62,7 +62,6 @@ export default function Countdown({ onEnd }) {
     }, []);
 
     useEffect(() => {
-        console.log({ drawTime });
         if (!drawTime) return undefined;
 
         // calculate the next full second
