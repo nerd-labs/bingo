@@ -1,7 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 
 import { firebase } from '../initFirebase';
-import config from '../config';
 
 const db = firebase.database();
 
@@ -10,11 +9,12 @@ export default function useConfig() {
 
     const logsRef = useRef(db.ref('logs'));
 
-    function addLog(text) {
+    function addLog(text, highlight) {
         const newLog = logsRef.current.push();
 
         newLog.set({
             text,
+            highlight: !!highlight,
             time: Date.now(),
             key: newLog.key,
         });
