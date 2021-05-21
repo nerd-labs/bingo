@@ -18,8 +18,6 @@ import Shape, { SHAPES }from '../src/components/Shape';
 const db = firebase.database();
 
 export default function Home() {
-    const router = useRouter();
-
     const [hasShape, setHasShape] = useState(false);
     const [hasBingo, setHasBingo] = useState(false);
     const [clickedBingo, setClickedBingo] = useState(false);
