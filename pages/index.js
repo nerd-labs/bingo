@@ -10,6 +10,7 @@ import useLogs from '../src/hooks/useLogs';
 import Balls from '../src/components/Balls';
 import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
+import Countdown from '../src/components/Countdown';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
 import Shape, { SHAPES }from '../src/components/Shape';
@@ -17,7 +18,8 @@ import Shape, { SHAPES }from '../src/components/Shape';
 const db = firebase.database();
 
 export default function Home() {
-    const router = useRouter()
+    const router = useRouter();
+
     const [hasBingo, setHasBingo] = useState(false);
     const [user, setUser] = useState();
     const [pickedShapes, setPickedShapes] = useState([]);
@@ -71,7 +73,7 @@ export default function Home() {
 
     useEffect(() => {
         shapesRef.current.on('value', (snapshot) => {
-            setPickedShapes(snapshot.val());
+            setPickedShapes(snapshot.val().map(v => !v.enabled));
         });
 
         return () => {
@@ -122,7 +124,9 @@ export default function Home() {
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
-                { hasCountdown ? <p> countdow</p>  : (
+                { hasCountdown ? (
+                    <Countdown />
+                ) : (
                     <div className={styles.bingo}>
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>

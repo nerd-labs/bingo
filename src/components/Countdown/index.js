@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import classNames from 'classnames';
+import { firebase } from '../../initFirebase';
 
 import useSound from '../../hooks/useSound';
 
@@ -37,11 +38,14 @@ function Number({ value }) {
     );
 }
 
+const db = firebase.database();
+
 export default function Countdown({ onEnd }) {
-    const drawTime = 1621598584261;
+    const countdownRef = useRef(db.ref('countdown'));
 
     const FLASH_TIME = 10;
 
+    const [drawTime, setDrawTime] = useState();
     const [time, setTime] = useState();
     const [isFlashing, setIsFlashing] = useState(false);
 
@@ -49,6 +53,12 @@ export default function Countdown({ onEnd }) {
 
     const nextDrawDate = useRef();
     const interval = useRef();
+
+    useEffect(() => {
+        countdownRef.current.on('value', (snapshot) => {
+            setDrawTime(snapshot.val());
+        });
+    }, []);
 
     useEffect(() => {
         if (!drawTime) return undefined;
