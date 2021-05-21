@@ -67,7 +67,7 @@ export default function Home() {
         return () => {
             bingoRef.current.off();
         };
-    }, [])
+    }, [user])
 
     useEffect(() => {
         async function getIp() {
@@ -141,8 +141,6 @@ export default function Home() {
     }
 
     if (!user) return null;
-
-    console.log(hasCountdown);
 
     return (
         <>
