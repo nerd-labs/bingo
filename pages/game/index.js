@@ -34,6 +34,7 @@ export default function Home() {
     const ranksRef = useRef(db.ref('ranks'));
 
     const hasExtraPrice = useMemo(() => config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
+    const showCountdown = useMemo(() => config.activeRange.round === 3, [config.activeRange.round]);
 
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {
@@ -173,6 +174,12 @@ export default function Home() {
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
+
+                { showCountdown && (
+                    <div className={styles.countdown}>
+                        <Countdown /> 
+                    </div>
+                )}
                 
                 { (clickedBingo || clickedShape ) && (
                     <div className={styles.qrCode}>
@@ -181,7 +188,7 @@ export default function Home() {
                     </div>
                 )}
 
-                { !clickedBingo && !clickedShape && (
+                { !showCountdown && !clickedBingo && !clickedShape && (
                     <div className={styles.bingo}>
                         <div className={styles.bingoWrapper}>
                             <div className={styles.shapes}>

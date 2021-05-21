@@ -31,6 +31,7 @@ export default function Admin() {
     const ballsRef = useRef(db.ref('balls'));
     const bingoRef = useRef(db.ref('bingo'));
     const shapesRef = useRef(db.ref('shapes'));
+    const countdownRef = useRef(db.ref('countdown'));
 
     function toDate(timestamp) {
         return new Date(timestamp).toLocaleString();
@@ -212,13 +213,20 @@ export default function Admin() {
 
         let newRound = config.activeRange.round;
         let newRank = config.activeRange.rank;
+        let countdown = undefined;
 
-        if (config.activeRange.round < 3) {
+        if (config.activeRange.round < MAX_ROUNDS) {
             newRound += 1;
 
             db.ref(`ranks/${config.activeRange.rank}`).update({
                 round: newRound,
             });
+
+
+            if (newRound === MAX_ROUNDS) {
+                // add 10 minutes
+                countdown = Date.now() + 600000;
+            }
         } else {
             db.ref(`ranks/${config.activeRange.rank}`).update({
                 active: false,
@@ -231,6 +239,12 @@ export default function Admin() {
                 round: 1,
                 active: true,
             });
+        }
+
+        if (countdown) {
+            countdownRef.current.set(countdown);
+        } else {
+            countdownRef.current.remove();
         }
 
         addLog(`Nieuwe ronde gestart: rang ${newRank}, ronde ${newRound}`, true);

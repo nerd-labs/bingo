@@ -63,10 +63,15 @@
     grid-template-rows: repeat(2, 80px);
     grid-gap: 10px;
     justify-content: center;
-    margin-bottom: 10px;}
+    margin-bottom: 10px;
+}
 
 .logoImage {
     height: 250px;
+}
+
+.countdown {
+    grid-area: bingo;
 }
 
 .bingoWrapper {
