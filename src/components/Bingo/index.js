@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import classNames from 'classnames';
 
 import styles from './Bingo.module.css';
 
@@ -15,11 +16,10 @@ function Bulbs({ bulbs }) {
 }
 
 
-export default function Bingo() {
+export default function Bingo({ text, secondary }) {
     const BASE_TIME = 150;
-    const TEXT = 'bingo';
 
-    const split = TEXT.split('');
+    const split = text.split('');
 
     const wrapperRef = useRef();
 
@@ -74,7 +74,9 @@ export default function Bingo() {
     }, []);
 
     return (
-        <div className={styles.bingo}>
+        <div className={classNames(styles.bingo, {
+            [styles.secondary]: secondary,
+        })}>
             <div ref={wrapperRef} className={styles.bingoInner}>
                 <div className={styles.bottom}>
                     <Bulbs bulbs={xBulbs} />
