@@ -225,37 +225,42 @@ export default function Admin() {
             <div className={styles.formBlock}>
                 <h1 className={styles.title}>Figuren</h1>
 
-                { shapes.length && (
+                { !!shapes.length && (
                     <div className={styles.shapes}>
-                        { config?.activeRange && [...Array(6).keys()].map((r, i) => (
-                            <>
-                                <Shape 
-                                    key={i} 
-                                    shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} 
-                                    disabled={shapes[i].enabled} 
-                                />
+                        { config.activeRange.rank && shapes.map((r, i) => {
+                            const { rank, round } = config.activeRange;
+                            const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
 
-                                <div>
-                                    { shapes[i].users && 
-                                    <>
-                                        <div> {shapes[i].users[0].name} - { toDate(shapes[i].users[0].time) }</div>
-                                        <button 
-                                            className={styles.button} 
-                                            onClick={() => acceptShape(i, shapes[i].users[0])}
-                                        >
-                                            Correct
-                                        </button>
-                                        <button 
-                                            className={classNames(styles.button, styles.buttonDecline)} 
-                                            onClick={() => declineShape(i, shapes[i].users[0])}
-                                        >
-                                            Foutief
-                                        </button>
-                                    </>
-                                    }
-                                </div>
-                            </>
-                        ))}
+                            return shape && (
+                                <>
+                                    <Shape 
+                                        key={i} 
+                                        shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} 
+                                        disabled={shapes[i].enabled} 
+                                    />
+
+                                    <div className={styles.shapeWrapper}>
+                                        { shapes[i].users && 
+                                        <>
+                                            <div> {shapes[i].users[0].name} - { toDate(shapes[i].users[0].time) }</div>
+                                            <button 
+                                                className={styles.button} 
+                                                onClick={() => acceptShape(i, shapes[i].users[0])}
+                                            >
+                                                Correct
+                                            </button>
+                                            <button 
+                                                className={classNames(styles.button, styles.buttonDecline)} 
+                                                onClick={() => declineShape(i, shapes[i].users[0])}
+                                            >
+                                                Foutief
+                                            </button>
+                                        </>
+                                        }
+                                    </div>
+                                </>
+                            );
+                        })}
                     </div>
                 )}
             </div>

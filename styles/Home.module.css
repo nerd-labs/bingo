@@ -21,6 +21,28 @@
         "extraPrice balls bingo";
 }
 
+.clickedBingo .bingo {
+    display: none;
+}
+
+.qrCode {
+    align-items: center;
+    color: var(--color-white);
+    font-size: 21px;
+    grid-area: bingo;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-align: center;
+    text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.qrCode img {
+    border-radius: 10px;
+    height: 200px;
+    margin-top: 10px;
+}
+
 .grid {
     grid-area: grid;
 }

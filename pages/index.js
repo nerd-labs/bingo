@@ -1,6 +1,6 @@
 import styles from '../styles/Home.module.css'
 import classNames from 'classnames';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
 
@@ -19,6 +19,7 @@ const db = firebase.database();
 export default function Home() {
     const router = useRouter()
     const [hasBingo, setHasBingo] = useState(false);
+    const [clickedBingo, setClickedBingo] = useState(false);
     const [user, setUser] = useState();
     const [pickedShapes, setPickedShapes] = useState([]);
 
@@ -27,6 +28,8 @@ export default function Home() {
 
     const bingoRef = useRef(db.ref('bingo'));
     const shapesRef = useRef(db.ref('shapes'));
+
+    const hasExtraPrice = useMemo(() => config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
 
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {
@@ -39,8 +42,17 @@ export default function Home() {
             setHasBingo(true);
         });
 
+        bingoRef.current.on('child_removed', (snapshot) => {
+            if (snapshot.val().id === user.key) {
+                setClickedBingo(false);
+            }
+        });
+
         bingoRef.current.on('value', (snapshot) => {
-            if (!snapshot.val()) setHasBingo(false);
+            if (!snapshot.val()) {
+                setHasBingo(false);
+                setClickedBingo(false);
+            }
         });
 
         return () => {
@@ -68,13 +80,24 @@ export default function Home() {
 
     useEffect(() => {
         shapesRef.current.on('value', (snapshot) => {
-            setPickedShapes(snapshot.val().map(s => !s.enabled));
+            const value = snapshot.val();
+
+            if (!value) {
+                setClickedBingo(false);
+                return;
+            }
+
+            setPickedShapes(value.map(s => !s.enabled));
+
+            setClickedBingo(value.some((shape) => {
+                return shape.users && Object.values(shape.users).some((u) => u.userId === user?.key);
+            }));
         });
 
         return () => {
             shapesRef.current.off();
         };
-    }, []);
+    }, [user]);
 
     function bingo() {
         const newBingo = bingoRef.current.push();
@@ -86,6 +109,7 @@ export default function Home() {
         });
 
         addLog(`${user.name} clicked bingo!`);
+        setClickedBingo(true);
     }
 
     function shapeClicked(index) {
@@ -100,10 +124,7 @@ export default function Home() {
         });
 
         addLog(`${user.name} heeft geklikt op vorm ${index + 1}`);
-    }
-
-    function hasExtraPrice() {
-        return !!config?.levelConfig?.extraQuestion;
+        setClickedBingo(true);
     }
 
     if (!user) return null;
@@ -113,7 +134,8 @@ export default function Home() {
             <div className={classNames(
                 styles.page,
                 {
-                    [styles.hasExtraPrice]: hasExtraPrice(),
+                    [styles.hasExtraPrice]: hasExtraPrice,
+                    [styles.clickedBingo]: clickedBingo,
                 }
             )}>
                 <h1 className={styles.fam}>Welkom: { user.name }</h1>
@@ -126,18 +148,32 @@ export default function Home() {
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
-                <div className={styles.bingo}>
-                    <div className={styles.bingoWrapper}>
-                        <div className={styles.shapes}>
-                            { config?.activeRange && [...Array(6).keys()].map((r, i) => (
-                                <Shape key={i} shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
-                            ))}
-                        </div>
-                        <Button text='BINGO' onClick={() => bingo() } />
+                
+                { clickedBingo && (
+                    <div className={styles.qrCode}>
+                        Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
+                        <img src="./qr.png" alt="qr code" />
                     </div>
-                </div>
+                )}
+
+                { !clickedBingo && (
+                    <div className={styles.bingo}>
+                        <div className={styles.bingoWrapper}>
+                            <div className={styles.shapes}>
+                                { config.activeRange.rank && [...Array(6).keys()].map((r, i) => {
+                                    const { rank, round } = config.activeRange;
+                                    const shape = SHAPES[`SHAPE_${rank}_${round}_${i + 1}`];
+
+                                    return shape && <Shape key={i} shape={shape} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
+                                })}
+                            </div>
+                            <Button text='BINGO' onClick={() => bingo() } />
+                        </div>
+                    </div>
+                )}
+
                 <div className={styles.extraPrice}>
-                    { hasExtraPrice() && (
+                    { hasExtraPrice && (
                         <ExtraPrice text={config.levelConfig.extraQuestion} /> 
                     )}
                 </div>
