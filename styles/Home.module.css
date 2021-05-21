@@ -33,10 +33,6 @@
     grid-area: balls;
 }
 
-.countdown {
-    grid-area: countdown;
-}
-
 .logo {
     grid-area: logo;
     text-align: center;
