@@ -1,18 +1,28 @@
 .admin {
     display: grid;
     grid-template-areas:
-        "content balls users logs";
-    grid-template-columns: 1fr 1fr 450px 450px;
+        "bingo ranks"
+        "shapes balls"
+        "users logs";
+    grid-template-columns: 1fr 1fr;
     height: 100vh;
     overflow: hidden;
     padding: 30px;
 }
 
-.content {
-    grid-area: content;
+.bingo {
+    grid-area: bingo;
 }
 
-.logs, .users, .balls {
+.ranks {
+    grid-area: ranks;
+}
+
+.shapes {
+    grid-area: shapes;
+}
+
+.logs, .users {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -54,13 +64,13 @@
 }
 
 .formBlock {
-    color: white;
-    margin-bottom: 150px;
+    color: var(--color-white);
+    margin-bottom: 100px;
     text-align: center;
 }
 
 .title {
-    color: #69BE28;
+    color: var(--color-white);
 }
 
 .input {
@@ -92,10 +102,10 @@
     color: var(--color-bordeaux);
 }
 
-.shapes {
+.shape {
     align-items: center;
     display: flex;
-    justify-content: center;
+    margin-bottom: 10px;
 }
 
 .ranks {

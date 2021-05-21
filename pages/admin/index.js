@@ -96,6 +96,7 @@ export default function Admin() {
     useEffect(() => {
         shapesRef.current.on("value", (snapshot) => {
             setShapes(snapshot.val());
+            console.log(snapshot.val());
         });
 
         return () => {
@@ -118,10 +119,20 @@ export default function Admin() {
 
     function shapeClicked(index) {
         shapesRef.current.update({
-            [index]: false
+            [index]: true
         });
 
         addLog(`Admin enabled shape ${index + 1}`);
+    }
+
+    function acceptShape(index) {
+        shapesRef.current.child(`${index}/enabled`).set(false);
+        console.log('accept', index);
+        addLog(`Admin heeft vorm ${index + 1} van ${user} aanvaard`);
+    }
+
+    function declineShape(index) {
+        console.log('decline', index);
     }
 
     function submitNumber(e) {
@@ -131,8 +142,8 @@ export default function Admin() {
             return alert(`De bal met nummer ${ballValue} is al reeds getrokken!`);
         }
 
-        const confirmmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
-        if (!confirmmed) return;
+        const confirmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
+        if (!confirmed) return;
 
         const newBallRef = ballsRef.current.push();
         newBallRef.set({
@@ -143,12 +154,26 @@ export default function Admin() {
         setBallValue('')
     }
 
+    function clearShapes() {
+        shapesRef.current.remove();
+
+        const newShapes = [];
+
+        for (let i = 0; i < 6; i++) {
+            newShapes.push({
+                enabled: true,
+            });
+        }
+
+        shapesRef.current.set(newShapes);
+    }
+
     function changeActiveRound() {
         const confirmmed = confirm("Ben je zeker?");
         if (!confirmmed) return;
 
         ballsRef.current.remove();
-        shapesRef.current.set([false, false, false, false, false]);
+        clearShapes();
 
         if (config.activeRange.round < 3) {
             db.ref(`ranks/${config.activeRange.rank}`).update({
@@ -168,11 +193,51 @@ export default function Admin() {
 
     return (
         <main className={styles.admin}>
-            <div className={styles.content}>
-                { priceRanks && (
-                    <div className={classNames(styles.formBlock, styles.ranks)}>
-                        <h1 className={styles.title}>Actieve rang / ronde</h1>
+            <div className={styles.formBlock}>
+                <h1 className={styles.title}>Families met bingo</h1>
+                <button onClick={clearShapes}>shapes</button>
 
+                { bingo[0] && (
+                    <div>
+                        <p> {bingo[0].name} - { toDate(bingo[0].bingo) }</p>
+                        <button className={styles.button} onClick={() => accept(bingo[0])}>Correct</button>
+                        <button className={classNames(styles.button, styles.buttonDecline)} onClick={() => decline(bingo[0])}>Foutief</button>
+                    </div> 
+                )}
+            </div>
+
+            <div className={styles.formBlock}>
+                <h1 className={styles.title}>Figuren</h1>
+
+                { shapes && (
+                    <div className={styles.shapes}>
+                        { config && config.activeRange && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
+                            <div className={styles.shape}>
+                                <Shape key={i} shape={r} disabled={shapes[i].enabled} />
+
+                                { shapes[i].users && 
+                                    <>
+                                        <p> {shapes[i].users[0].name} - { toDate(shapes[i].users[0].time) }</p>
+                                        <button className={styles.button} onClick={() => acceptShape(i)}>Correct</button>
+                                        <button 
+                                            className={classNames(styles.button, styles.buttonDecline)} 
+                                            onClick={() => declineShape(i)}
+                                        >
+                                            Foutief
+                                        </button>
+                                    </>
+                                }
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            <div className={classNames(styles.formBlock, styles.ranks)}>
+                <h1 className={styles.title}>Actieve rang / ronde</h1>
+
+                { priceRanks && (
+                    <>
                         <p className={styles.activeRound}>
                             {config.activeRange && config.activeRange.label} 
                             {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
@@ -186,31 +251,7 @@ export default function Admin() {
                                 Start nieuwe {config.activeRange.round < MAX_ROUNDS ? 'ronde' : 'rang'}
                             </button>
                         )}
-                    </div>
-                )}
-
-                { shapes && (
-                    <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Figuren</h1>
-
-                        <div className={styles.shapes}>
-                            { config && config.activeRange && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
-                                <Shape key={i} shape={r} disabled={!shapes[i]} onClick={() => shapeClicked(i)} />
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                { bingo[0] && (
-                    <div className={styles.formBlock}>
-                        <h1 className={styles.title}>Families met bingo</h1>
-
-                        <div>
-                            <p> {bingo[0].name} - { toDate(bingo[0].bingo) }</p>
-                            <button className={styles.button} onClick={() => accept(bingo[0])}>Correct</button>
-                            <button className={classNames(styles.button, styles.buttonDecline)} onClick={() => decline(bingo[0])}>Foutief</button>
-                        </div> 
-                    </div>
+                    </>
                 )}
             </div>
 
@@ -260,7 +301,7 @@ export default function Admin() {
 
                 <div className={styles.gridContent}>
                     {
-                        logs.map((log) => (
+                        logs.reverse().map((log) => (
                             <div key={log.key} className={styles.line}>
                                 <span className={styles.logTime}>
                                     { getTime(log.time) }

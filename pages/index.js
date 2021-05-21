@@ -67,7 +67,7 @@ export default function Home() {
 
     useEffect(() => {
         shapesRef.current.on('value', (snapshot) => {
-            setPickedShapes(snapshot.val());
+            setPickedShapes(snapshot.val().map(s => !s.enabled));
         });
 
         return () => {
@@ -88,11 +88,17 @@ export default function Home() {
     }
 
     function shapeClicked(index) {
-        shapesRef.current.update({
-            [index]: true
+        const child = shapesRef.current.child(`${index}/users`);
+        const newShape = child.push();
+
+        newShape.set({
+            userId,
+            name: user.name,
+            time: Date.now(),
+            key: newShape.key,
         });
 
-        addLog(`${user.name} clicked shape ${index + 1}`);
+        addLog(`${user.name} heeft geklikt op vorm ${index + 1}`);
     }
 
     if (!user) return null;

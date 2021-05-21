@@ -28,11 +28,17 @@ export default function Shape({ disabled, shape, onClick }) {
     const bulls = [...Array(25)].map((_v, i) => i + 1);
 
     function onShapeClick() {
-        if (!disabled) onClick();
+        if (!disabled && onClick) onClick();
     }
 
     return (
-        <div className={classNames(styles.shape, { [styles.disabled]: disabled })} onClick={onShapeClick}>
+        <div 
+            className={classNames(styles.shape, { 
+                [styles.disabled]: disabled, 
+                [styles.clickable]: !!onClick,
+            })} 
+            onClick={onShapeClick}
+        >
             { bulls.map((i) => (
                 <span 
                     key={i} 
