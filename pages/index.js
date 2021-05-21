@@ -5,6 +5,7 @@ import { firebase } from '../src/initFirebase';
 import Button from '../src/components/Button';
 
 import styles from './Index.module.css';
+import useSound from '../src/hooks/useSound';
 
 const db = firebase.database();
 
@@ -16,6 +17,8 @@ function Welcome() {
     const [isLoading, setIsLoading] = useState(true);
     const [name, setName] = useState('');
 
+    const [playWaiting, { stop: stopWaiting }] = useSound('./efteling.wav', { loop: true });
+
     const ranksRef = useRef(db.ref('ranks'));
     const usersRef = useRef(db.ref('users'));
 
@@ -26,8 +29,15 @@ function Welcome() {
     });
 
     useEffect(() => {
-        if (hasActiveGame && user && !isLoading) return router.push('/game');
-    }, [hasActiveGame]);
+        if (isLoading) return;
+
+        if (!hasActiveGame && user) playWaiting();
+
+        if (hasActiveGame && user) {
+            stopWaiting();
+            return router.push('/game');
+        }
+    }, [hasActiveGame, user, isLoading]);
 
     useEffect(() => {
         async function getUser() {
@@ -59,9 +69,11 @@ function Welcome() {
     }, [user]);
 
     useEffect(() => {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
             setIsLoading(false);
         }, 4000);
+
+        return () => clearTimeout(timeout);
     }, []);
 
     async function addUser(e) {

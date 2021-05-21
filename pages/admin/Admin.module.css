@@ -23,14 +23,25 @@
 .shapes {
     display: grid;
     grid-area: shapes;
-    grid-template-columns: 60px 1fr;
-    grid-template-rows: repeat(6, 60px);
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 80px);
     grid-gap: 10px;
+}
+
+.shapes > div {
+    display: flex;
+    flex-direction: row;
+}
+
+.shape {
+    height: 80px;
+    width: 80px;
 }
 
 .shapeWrapper {
     align-items: center;
     display: flex;
+    margin-left: 20px;
 }
 
 .logs, .users {
