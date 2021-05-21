@@ -26,7 +26,6 @@ function Welcome() {
     });
 
     useEffect(() => {
-        console.log(hasActiveGame);
         if (hasActiveGame && user && !isLoading) return router.push('/game');
     }, [hasActiveGame]);
 

@@ -228,16 +228,16 @@ export default function Admin() {
                 countdown = Date.now() + 600000;
             }
         } else {
-            db.ref(`ranks/${config.activeRange.rank}`).update({
-                active: false,
-            });
-
             newRank += 1;
             newRound = 1;
 
             db.ref(`ranks/${newRank}`).update({
                 round: 1,
                 active: true,
+            });
+
+            db.ref(`ranks/${config.activeRange.rank}`).update({
+                active: false,
             });
         }
 
