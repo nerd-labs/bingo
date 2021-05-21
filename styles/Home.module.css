@@ -21,6 +21,50 @@
         "extraPrice balls bingo";
 }
 
+.clickedBingo {
+    grid-template-areas:
+        "grid balls fam"
+        "grid balls logo"
+        "grid balls qrCode"
+        "extraPrice balls qrCode";
+
+}
+
+
+.clickedBingo.hasExtraPrice {
+    grid-template-areas:
+        "grid balls fam"
+        "grid balls logo"
+        "grid balls qrCode"
+        "extraPrice balls qrCode";
+}
+
+.clickedBingo .qrCode {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.clickedBingo .bingo {
+    display: none;
+}
+
+.qrCode {
+    display: none;
+    grid-area: qrCode;
+    color: var(--color-white);
+    font-size: 21px;
+    text-align: center;
+    text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.qrCode img {
+    border-radius: 10px;
+    height: 200px;
+    margin-top: 10px;
+}
+
 .grid {
     grid-area: grid;
 }

@@ -19,6 +19,7 @@ const db = firebase.database();
 export default function Home() {
     const router = useRouter()
     const [hasBingo, setHasBingo] = useState(false);
+    const [clickedBingo, setClickedBingo] = useState(false);
     const [user, setUser] = useState();
     const [pickedShapes, setPickedShapes] = useState([]);
 
@@ -39,8 +40,17 @@ export default function Home() {
             setHasBingo(true);
         });
 
+        bingoRef.current.on('child_removed', (snapshot) => {
+            if (snapshot.val().id === user.key) {
+                setClickedBingo(false);
+            }
+        });
+
         bingoRef.current.on('value', (snapshot) => {
-            if (!snapshot.val()) setHasBingo(false);
+            if (!snapshot.val()) {
+                setHasBingo(false);
+                setClickedBingo(false);
+            }
         });
 
         return () => {
@@ -86,6 +96,7 @@ export default function Home() {
         });
 
         addLog(`${user.name} clicked bingo!`);
+        setClickedBingo(true);
     }
 
     function shapeClicked(index) {
@@ -108,6 +119,7 @@ export default function Home() {
                 styles.page,
                 {
                     [styles.hasExtraPrice]: hasExtraPrice(),
+                    [styles.clickedBingo]: clickedBingo,
                 }
             )}>
                 <h1 className={styles.fam}>Welkom: { user.name }</h1>
@@ -119,6 +131,10 @@ export default function Home() {
                 </div>
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
+                </div>
+                <div className={styles.qrCode}>
+                    Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
+                    <img src="./qr.png" alt="qr code" />
                 </div>
                 <div className={styles.bingo}>
                     <div className={styles.bingoWrapper}>
