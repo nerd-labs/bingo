@@ -14,7 +14,7 @@ export default function useConfig() {
 
         ref.on("value", (snapshot) => {
             const range = snapshot.val().find((obj) => obj && obj.active);
-            setActiveRange(range);
+            setActiveRange(range || {});
 
             let rang = null;
 
@@ -38,7 +38,7 @@ export default function useConfig() {
             }
 
             if (config[rang]) setLevelConfig(config[rang]);
-            else setLevelConfig([]);
+            else setLevelConfig({});
         });
 
         return () => {

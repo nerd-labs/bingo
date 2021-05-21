@@ -10,6 +10,7 @@ import useLogs from '../src/hooks/useLogs';
 import Balls from '../src/components/Balls';
 import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
+import Countdown from '../src/components/Countdown';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
 import Shape, { SHAPES }from '../src/components/Shape';
@@ -32,6 +33,7 @@ export default function Home() {
     const shapesRef = useRef(db.ref('shapes'));
 
     const hasExtraPrice = useMemo(() => config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
+    const showCountdown = useMemo(() => config.activeRange.round === 3, [config.activeRange.round]);
 
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {
@@ -158,7 +160,13 @@ export default function Home() {
                 <div className={styles.logo}>
                     <img src="/logo.png" className={styles.logoImage} alt="logo" />
                 </div>
-                
+
+                { showCountdown && (
+                    <div className={styles.countdown}>
+                        <Countdown /> 
+                    </div>
+                )}
+
                 { (clickedBingo || clickedShape ) && (
                     <div className={styles.qrCode}>
                         Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
@@ -166,7 +174,7 @@ export default function Home() {
                     </div>
                 )}
 
-                { !clickedBingo && !clickedShape && (
+                { !showCountdown && !clickedBingo && !clickedShape && (
                     <div className={styles.bingo}>
                         <div className={styles.bingoWrapper}>
                             <div className={styles.shapes}>

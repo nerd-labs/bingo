@@ -1,0 +1,43 @@
+@keyframes flash {
+    0% {
+        color: var(--color-white);
+    }
+
+    100% {
+        color: var(--color-red);
+    }
+}
+
+.countdown {
+    align-items: center;
+    color: var(--color-white);
+    display: flex;
+    font-size: 70px;
+    justify-content: space-around;
+    text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.countdown.flash .number {
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-name: flash;
+}
+
+.number {
+    background-image: linear-gradient(var(--color-orange), var(--color-yellow), var(--color-orange));
+    border-radius: 10px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+    padding: 4px;
+}
+
+.numberInner {
+    background-image: radial-gradient(var(--color-yellow), var(--color-dark-orange));
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    height: 90px;
+    line-height: 1;
+    padding: 20px;
+    text-align: center;
+    width: 90px;
+}
+
