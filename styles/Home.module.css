@@ -2,14 +2,23 @@
     display: grid;
     grid-gap: 10px;
     grid-template-areas: 
-        "fam fam fam"
+        "grid balls fam"
         "grid balls logo"
-        "grid balls extraPrice"
+        "grid balls bingo"
         "grid balls bingo";
     grid-template-columns: auto 66px 440px;
-    grid-template-rows: 100px auto auto auto;
+    grid-template-rows: 40px auto auto auto;
     margin: 0 auto; 
+    padding: 50px 0;
     max-width: 1240px;
+}
+
+.hasExtraPrice {
+    grid-template-areas:
+        "grid balls fam"
+        "grid balls logo"
+        "grid balls bingo"
+        "extraPrice balls bingo";
 }
 
 .grid {
@@ -26,10 +35,13 @@
 }
 
 .shapes {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
+    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(2, 80px);
+    grid-gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;}
 
 .logoImage {
     height: 250px;
@@ -58,6 +70,10 @@
 
 .extraPrice {
     grid-area: extraPrice;
+}
+
+.extraPrice:not(:empty) {
+    margin-top: 10px;
 }
 
 .bingoBox {

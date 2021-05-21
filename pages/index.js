@@ -1,4 +1,5 @@
 import styles from '../styles/Home.module.css'
+import classNames from 'classnames';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router'
 import { firebase } from '../src/initFirebase';
@@ -11,7 +12,7 @@ import Bingo from '../src/components/Bingo';
 import Button from '../src/components/Button';
 import ExtraPrice from '../src/components/ExtraPrice';
 import Grid from '../src/components/Grid';
-import Shape from '../src/components/Shape';
+import Shape, { SHAPES }from '../src/components/Shape';
 
 const db = firebase.database();
 
@@ -25,7 +26,7 @@ export default function Home() {
     const [, addLog] = useLogs();
 
     const bingoRef = useRef(db.ref('bingo'));
-    const shapesRef = useRef(db.ref('shapes'));
+    const shapesRef = useRef(db.ref('shapess'));
 
     const [userId] = useState(() => {
         if (typeof window !== "undefined") {
@@ -101,11 +102,20 @@ export default function Home() {
         addLog(`${user.name} heeft geklikt op vorm ${index + 1}`);
     }
 
+    function hasExtraPrice() {
+        return !!config?.levelConfig?.extraQuestion;
+    }
+
     if (!user) return null;
 
     return (
         <>
-            <div className={styles.page}>
+            <div className={classNames(
+                styles.page,
+                {
+                    [styles.hasExtraPrice]: hasExtraPrice(),
+                }
+            )}>
                 <h1 className={styles.fam}>Welkom: { user.name }</h1>
                 <div className={styles.grid}>
                     <Grid />
@@ -119,15 +129,17 @@ export default function Home() {
                 <div className={styles.bingo}>
                     <div className={styles.bingoWrapper}>
                         <div className={styles.shapes}>
-                            { config && config.activeRange && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
-                                <Shape key={i} shape={r} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
+                            { config?.activeRange && [...Array(6).keys()].map((r, i) => (
+                                <Shape key={i} shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} disabled={pickedShapes[i]} onClick={() => shapeClicked(i)} />
                             ))}
                         </div>
                         <Button text='BINGO' onClick={() => bingo() } />
                     </div>
                 </div>
                 <div className={styles.extraPrice}>
-                    <ExtraPrice />
+                    { hasExtraPrice() && (
+                        <ExtraPrice text={config.levelConfig.extraQuestion} /> 
+                    )}
                 </div>
             </div>
 

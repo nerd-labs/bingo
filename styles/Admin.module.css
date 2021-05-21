@@ -8,6 +8,7 @@
     height: 100vh;
     overflow: hidden;
     padding: 30px;
+    width: 100%;
 }
 
 .bingo {
@@ -19,7 +20,11 @@
 }
 
 .shapes {
+    display: grid;
     grid-area: shapes;
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: repeat(6, 60px);
+    grid-gap: 10px;
 }
 
 .logs, .users {
@@ -103,9 +108,6 @@
 }
 
 .shape {
-    align-items: center;
-    display: flex;
-    margin-bottom: 10px;
 }
 
 .ranks {

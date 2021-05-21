@@ -5,6 +5,7 @@
     display: inline-block;
     font-size: 30px;
     padding: 8px;
+    /* margin-bottom: 10px; */
     position: relative;
 }
 
@@ -20,7 +21,7 @@
     grid-template-columns: repeat(5, var(--square-size));
     grid-auto-rows: var(--square-size);
     padding: 40px 30px;
-    height: 720px;
+    height: 590px;
 }
 
 .title {

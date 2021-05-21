@@ -4,11 +4,7 @@ import useConfig from '../../hooks/useConfig';
 
 import styles from './ExtraPrice.module.css';
 
-export default function ExtraPrice() {
-    const config = useConfig();
-
-    if (!config || !config.levelConfig || !config.levelConfig.extraQuestion) return null;
-
+export default function ExtraPrice({ text }) {
     return (
         <div className={styles.grid}>
             <div className={styles.title}>
@@ -17,7 +13,7 @@ export default function ExtraPrice() {
                 </div>
             </div>
             <div className={styles.gridInner}>
-                { config.levelConfig.extraQuestion }
+                { text }
             </div>
         </div>
     );

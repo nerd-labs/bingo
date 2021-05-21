@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import classNames from 'classnames';
 
-import Shape from '../../src/components/Shape';
+import Shape, { SHAPES } from '../../src/components/Shape';
 
 import styles from '../../styles/Admin.module.css'
 import { firebase } from '../../src/initFirebase';
@@ -28,7 +28,7 @@ export default function Admin() {
     const usersRef = useRef(db.ref('users'));
     const ballsRef = useRef(db.ref('balls'));
     const bingoRef = useRef(db.ref('bingo'));
-    const shapesRef = useRef(db.ref('shapes'));
+    const shapesRef = useRef(db.ref('shapess'));
 
     function toDate(timestamp) {
         return new Date(timestamp).toLocaleString();
@@ -95,8 +95,15 @@ export default function Admin() {
 
     useEffect(() => {
         shapesRef.current.on("value", (snapshot) => {
-            setShapes(snapshot.val());
-            console.log(snapshot.val());
+            const value = snapshot.val();
+            if (value) {
+                setShapes(value.map(v => ({
+                    ...v,
+                    users: v.users ? Object.values(v.users).sort((a, b) => a.time - b.time) : undefined,
+                })));
+            } else {
+                setShapes([]);
+            }
         });
 
         return () => {
@@ -107,32 +114,29 @@ export default function Admin() {
     function accept(bingo) {
         bingoRef.current.remove();
 
-        addLog(`Admin approved the bingo of ${bingo.name}!`);
+        addLog(`Admin heeft de bingo van ${bingo.name} aanvaard!`);
     }
 
     function decline(bingo) {
         const bingoKey = db.ref(`bingo/${bingo.key}`);
         bingoKey.remove();
 
-        addLog(`Admin declined the bingo of ${bingo.name}!`);
+        addLog(`Admin heeft de bingo van ${bingo.name} geweigerd`);
     }
 
-    function shapeClicked(index) {
-        shapesRef.current.update({
-            [index]: true
+    function acceptShape(index, user) {
+        shapesRef.current.child(index).set({
+            enabled: false,
         });
 
-        addLog(`Admin enabled shape ${index + 1}`);
+        addLog(`Admin heeft vorm ${index + 1} van ${user.name} aanvaard!`);
     }
 
-    function acceptShape(index) {
-        shapesRef.current.child(`${index}/enabled`).set(false);
-        console.log('accept', index);
-        addLog(`Admin heeft vorm ${index + 1} van ${user} aanvaard`);
-    }
+    function declineShape(index, user) {
+        const userKey = shapesRef.current.child(`${index}/users/${user.key}`);
+        userKey.remove();
 
-    function declineShape(index) {
-        console.log('decline', index);
+        addLog(`Admin heeft vorm ${index + 1} van ${user.name} geweigerd`);
     }
 
     function submitNumber(e) {
@@ -169,8 +173,8 @@ export default function Admin() {
     }
 
     function changeActiveRound() {
-        const confirmmed = confirm("Ben je zeker?");
-        if (!confirmmed) return;
+        const confirmed = confirm('Ben je zeker?');
+        if (!confirmed) return;
 
         ballsRef.current.remove();
         clearShapes();
@@ -185,7 +189,7 @@ export default function Admin() {
             });
 
             db.ref(`ranks/${config.activeRange.rank + 1}`).update({
-                round: config.activeRange.rank === 3 ? false : 1,
+                round: 1,
                 active: true,
             });
         }
@@ -195,7 +199,6 @@ export default function Admin() {
         <main className={styles.admin}>
             <div className={styles.formBlock}>
                 <h1 className={styles.title}>Families met bingo</h1>
-                <button onClick={clearShapes}>shapes</button>
 
                 { bingo[0] && (
                     <div>
@@ -209,25 +212,36 @@ export default function Admin() {
             <div className={styles.formBlock}>
                 <h1 className={styles.title}>Figuren</h1>
 
-                { shapes && (
+                { shapes.length && (
                     <div className={styles.shapes}>
-                        { config && config.activeRange && config.levelConfig && config.levelConfig.rounds && config.levelConfig.rounds[config.activeRange.round ? config.activeRange.round - 1 : 0].map((r, i) => (
-                            <div className={styles.shape}>
-                                <Shape key={i} shape={r} disabled={shapes[i].enabled} />
+                        { config?.activeRange && [...Array(6).keys()].map((r, i) => (
+                            <>
+                                <Shape 
+                                    key={i} 
+                                    shape={SHAPES[`SHAPE_${config.activeRange.rank}_${config.activeRange.round}_${i + 1}`]} 
+                                    disabled={shapes[i].enabled} 
+                                />
 
-                                { shapes[i].users && 
+                                <div>
+                                    { shapes[i].users && 
                                     <>
-                                        <p> {shapes[i].users[0].name} - { toDate(shapes[i].users[0].time) }</p>
-                                        <button className={styles.button} onClick={() => acceptShape(i)}>Correct</button>
+                                        <div> {shapes[i].users[0].name} - { toDate(shapes[i].users[0].time) }</div>
+                                        <button 
+                                            className={styles.button} 
+                                            onClick={() => acceptShape(i, shapes[i].users[0])}
+                                        >
+                                            Correct
+                                        </button>
                                         <button 
                                             className={classNames(styles.button, styles.buttonDecline)} 
-                                            onClick={() => declineShape(i)}
+                                            onClick={() => declineShape(i, shapes[i].users[0])}
                                         >
                                             Foutief
                                         </button>
                                     </>
-                                }
-                            </div>
+                                    }
+                                </div>
+                            </>
                         ))}
                     </div>
                 )}
@@ -301,7 +315,7 @@ export default function Admin() {
 
                 <div className={styles.gridContent}>
                     {
-                        logs.reverse().map((log) => (
+                        logs.map((log) => (
                             <div key={log.key} className={styles.line}>
                                 <span className={styles.logTime}>
                                     { getTime(log.time) }

@@ -8,9 +8,22 @@ import styles from './Grid.module.css';
 export default function Grid({ title }) {
     const config = useConfig();
 
-    const prizes = useMemo(() => (
-        shuffle(config?.levelConfig?.prizes || [])
-    ), [config.levelConfig, config.activeRange]);
+    const prizes = useMemo(() => {
+        let newPrizes = [];
+
+        if (config?.levelConfig?.prizes) {
+            newPrizes = config.levelConfig.prizes;
+
+            newPrizes = newPrizes.map((prize, index) => {
+                return {
+                    ...prize,
+                    date: `${index}-${Date.now()}`,
+                };
+            });
+        }
+
+        return shuffle(newPrizes);
+    }, [config.levelConfig, config.activeRange]);
 
     function shuffle(array) {
         const shuffledArray = [...array];
@@ -31,14 +44,14 @@ export default function Grid({ title }) {
             <div className={styles.title}>
                 <div className={styles.titleInner}>
                         {config.activeRange && config.activeRange.label} 
-                        {config.activeRange && config.activeRange.round && ` - Ronde ${config.activeRange.round}`} 
+                        {config.activeRange && config.activeRange.rank !== 4 && ` - Ronde ${config.activeRange.round}`} 
                 </div>
             </div>
             <div className={styles.gridInner}>
                 {prizes && prizes.map((item, i) => (
                     <Box
                         big={item.big}
-                        key={`${item.name}-${i}`}
+                        key={`${item.date}`}
                         url={item.url}
                         style={{ '--delay': `${getNumberBetween(500, 2000)}ms` }}
                     >
