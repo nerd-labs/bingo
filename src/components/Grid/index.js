@@ -43,12 +43,12 @@ export default function Grid() {
         <div className={styles.grid}>
             <div className={styles.title}>
                 <div className={styles.titleInner}>
-                        {config.activeRange && config.activeRange.label} 
-                        {config.activeRange && config.activeRange.rank !== 3 && ` - Ronde ${config.activeRange.round}`} 
+                        {!!config.activeRange && config.activeRange.label} 
+                        {!!config.activeRange && config.activeRange.rank !== 3 && ` - Ronde ${config.activeRange.round}`} 
                 </div>
             </div>
             <div className={styles.gridInner}>
-                {prizes && prizes.map((item, i) => (
+                {!!prizes && prizes.map((item, i) => (
                     <Box
                         big={item.big}
                         key={`${item.date}`}
