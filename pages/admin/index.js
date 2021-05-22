@@ -160,6 +160,7 @@ export default function Admin() {
         }
 
         if (!ballValue) return alert('Gelieve een nummer in te geven');
+        if (ballValue < 1) return alert('Dit nummer is te laag');
         if (ballValue > 75) return alert('Dit nummer is te hoog');
 
         const confirmed = confirm(`Wil je nummer ${ballValue} toevoegen?`);
