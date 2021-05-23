@@ -72,6 +72,7 @@
 .logoImage {
     display: block;
     max-width: 100%;
+    max-height: 50vh;
     margin-bottom: 50px;
 }
 
@@ -82,4 +83,51 @@
     height: 350px;
     justify-content: center;
     text-align: center;
+}
+
+
+@media (max-width: 1239px) {
+    .welcome {
+        padding: 20px;
+    }
+
+    .noActiveGame h1 {
+        font-size: 50px;
+    }
+
+    .loading {
+        font-size: 40px;
+    }
+
+    .noActiveGame p {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 767px) {
+    .loading,
+    .noActiveGame h1 {
+        font-size: 30px;
+    }
+
+    .noActiveGame p {
+        font-size: 20px;
+    }
+
+    .welcome {
+        padding: 10px;
+    }
+
+    .titleInner {
+        min-width: auto;
+        max-width: 100%;
+        font-size: 23px;
+        height: 44px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .button {
+        width: 100% !important;
+    }
 }

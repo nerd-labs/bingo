@@ -81,6 +81,10 @@
     text-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
 }
 
+.countdown h1 {
+    margin: 0;
+}
+
 .bingoWrapper {
     width: 100%;
 }
@@ -122,20 +126,68 @@
     z-index: 100;
 }
 
-@media (max-width: 1240px) {
+@media (max-width: 1293px) {
     .page {
-        grid-gap: 80px 40px;
+        justify-content: center;
+        grid-gap: 20px;
         grid-template-areas: 
-            "fam fam fam"
+            "fam logo logo"
             "bingo extraPrice extraPrice"
             "grid grid balls";
-        grid-template-columns: 360px 294px 66px;
+        grid-template-columns: 1fr 220px 66px;
         grid-template-rows: auto;
-        padding-bottom: 30px;
+        padding: 30px;
+        box-sizing: border-box;
         width: 800px;
+    }
+
+    .logoImage {
+        height: 150px;
+    }
+
+    .fam {
+        margin: 0;
+    }
+
+    .grid,
+    .balls {
+        margin-top: 30px;
+    }
+
+    .grid {
+        --square-size: 110px;
+    }
+}
+
+@media (max-width: 767px) {
+    .page {
+        box-sizing: border-box;
+        grid-template-areas: 
+            "fam"
+            "balls"
+            "bingo"
+            "extraPrice"
+            "grid";
+        grid-template-columns: 1fr;
+        grid-gap: 10px;
+        grid-auto-rows: auto;
+        padding: 10px;
+        width: 100%;
     }
 
     .logo {
         display: none;
+    }
+
+    .fam {  
+        margin-bottom: 0;
+    }
+
+    .balls {
+        margin-bottom: 20px;
+    }
+
+    .extraPrice {
+        margin-bottom: 40px;
     }
 }

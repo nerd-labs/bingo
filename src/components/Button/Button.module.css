@@ -50,3 +50,9 @@
 .button:hover {
     background-image: linear-gradient(var(--color-light), var(--color-dark));
 }
+
+@media (max-width: 767px) {
+    .button {
+        padding: 0;
+    }
+}

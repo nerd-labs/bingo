@@ -146,3 +146,29 @@
         top: -25px;
     }
 }
+
+@media (max-width: 1239px) {
+    .bingo {
+        width: 100%;
+    }
+
+    .bingoInner {
+        width: 100% !important;
+        font-size: 120px;
+        height: auto !important;
+        padding: 40px 20px 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .bingo {
+        width: 100%;
+    }
+
+    .bingoInner {
+        width: 100% !important;
+        font-size: 70px;
+        height: auto !important;
+        padding: 40px 20px 20px;
+    }
+}
