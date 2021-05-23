@@ -127,6 +127,10 @@
         width: 100%;
     }
 
+    .title {
+        height: 60px;
+    }
+
     .button {
         width: 100% !important;
     }
