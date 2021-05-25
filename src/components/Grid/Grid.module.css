@@ -55,6 +55,14 @@
         height: auto;
         padding: 40px 10px 10px;
     }
+
+    .title {
+        width: 55%;
+    }
+    
+    .titleInner {
+        text-align: center;
+    }
 }
 
 @media (max-width: 767px) {
@@ -77,6 +85,5 @@
 
     .titleInner {
         font-size: 25px;
-        text-align: center;
     }
 }
