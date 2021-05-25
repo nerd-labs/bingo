@@ -211,6 +211,10 @@ export default function Admin() {
     }
 
     function changeActiveRound() {
+        if (bingo.length || shapes.some((shape) => shape.users?.length)) {
+            return alert('Je hebt nog actieve approvals.');
+        }
+
         const confirmed = confirm('Ben je zeker?');
         if (!confirmed) return;
 
