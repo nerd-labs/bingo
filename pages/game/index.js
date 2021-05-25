@@ -37,6 +37,7 @@ export default function Home() {
     const bingoRef = useRef(db.ref('bingo'));
     const shapesRef = useRef(db.ref('shapes'));
     const ranksRef = useRef(db.ref('ranks'));
+    const usersRef = useRef(db.ref('users'));
 
     const hasExtraPrice = useMemo(() => config.levelConfig.extraQuestion, [config.levelConfig.extraQuestion]);
     const showCountdown = useMemo(() => config.activeRange.round === 3, [config.activeRange.round]);
@@ -46,6 +47,20 @@ export default function Home() {
             return localStorage.getItem('bingo.euri.com');
         }
     });
+
+    useEffect(() => {
+        window.addEventListener('beforeunload', (event) => {
+            event.preventDefault();
+            event.returnValue = true;
+            return true;
+        }, { capture: true });
+
+        window.addEventListener('unload', (event) => {
+            usersRef.current.child(userId).remove();
+
+            return;
+        }, { capture: true });
+    }, []);
 
     useEffect(() => {
         ranksRef.current.on('value', (snapshot) => {
@@ -194,7 +209,7 @@ export default function Home() {
                         <Countdown /> 
                     </div>
                 )}
-                
+
                 { (clickedBingo || clickedShape ) && (
                     <div className={styles.qrCode}>
                         Proficiat! Scan deze QR-Code en stuur jouw bingo kaart door via Whatsapp!
