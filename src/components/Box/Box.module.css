@@ -9,6 +9,7 @@
   color: var(--color-white);
   font-size: 20px;
   height: var(--square-size);
+  line-height: 1;
   padding: 4px;
   position: relative;
   margin: 0 auto;
