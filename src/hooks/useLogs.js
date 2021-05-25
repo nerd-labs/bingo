@@ -8,7 +8,7 @@ const db = firebase.database();
 
 export default function useConfig() {
     const [logs, setLogs] = useState([]);
-    const [playSound] = useSound('/deurbel.wav');
+    const [playSound] = useSound('./deurbel.wav');
 
     const logsRef = useRef(db.ref('logs'));
 
