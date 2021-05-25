@@ -104,7 +104,7 @@ function Welcome() {
             <div className={styles.content}>
                 { isLoading && <h1 className={styles.loading}>Spel aan het laden....</h1> }
 
-                { user && !isLoading && (
+                { !!user && !isLoading && (
                     <div className={styles.noActiveGame}>
                         <h1>Welkom {user?.name}</h1>
                         <p>Nog even geduld! We starten zo dadelijk!</p>
