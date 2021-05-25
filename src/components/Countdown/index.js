@@ -49,7 +49,7 @@ export default function Countdown({ onEnd }) {
     const [time, setTime] = useState();
     const [isFlashing, setIsFlashing] = useState(false);
 
-    const [playCountdown] = useSound('/countdown.mp3');
+    const [playCountdown] = useSound('./countdown.mp3');
 
     const nextDrawDate = useRef();
     const interval = useRef();

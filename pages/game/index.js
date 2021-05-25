@@ -148,7 +148,7 @@ export default function Home() {
             key: newBingo.key,
         });
 
-        addLog(`${user.name} clicked bingo!`);
+        addLog(`${user.name} clicked bingo!`, { sound: true });
         setClickedBingo(true);
     }
 
@@ -163,7 +163,7 @@ export default function Home() {
             key: newShape.key,
         });
 
-        addLog(`${user.name} heeft geklikt op vorm ${index + 1}`);
+        addLog(`${user.name} heeft geklikt op vorm ${index + 1}`, { sound: true });
         setClickedShape(true);
     }
 

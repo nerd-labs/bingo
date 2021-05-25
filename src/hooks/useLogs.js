@@ -2,19 +2,23 @@ import { useRef, useEffect, useState } from 'react';
 
 import { firebase } from '../initFirebase';
 
+import useSound from './useSound';
+
 const db = firebase.database();
 
 export default function useConfig() {
     const [logs, setLogs] = useState([]);
+    const [playSound] = useSound('./deurbel.wav');
 
     const logsRef = useRef(db.ref('logs'));
 
-    function addLog(text, highlight) {
+    function addLog(text, config) {
         const newLog = logsRef.current.push();
 
         newLog.set({
             text,
-            highlight: !!highlight,
+            highlight: !!config?.highlight,
+            sound: !!config?.sound,
             time: Date.now(),
             key: newLog.key,
         });
@@ -23,7 +27,14 @@ export default function useConfig() {
     useEffect(() => {
         logsRef.current.on("value", (snapshot) => {
             const value = snapshot.val();
-            if (value) setLogs(Object.values(value).reverse());
+            if (value) {
+                const reversedLogs = Object.values(value).reverse();
+                setLogs(reversedLogs);
+
+                if (reversedLogs[0].sound) {
+                    playSound();
+                }
+            }
         });
 
         return () => {
