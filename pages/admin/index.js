@@ -207,7 +207,7 @@ export default function Admin() {
         clearShapes();
 
         addLog(`Nieuwe spel gestart.`, true);
-        addLog(`Nieuwe ronde gestart: rang 1, ronde 1`, true);
+        addLog(`Nieuwe ronde gestart: rang 1, ronde 1`, { highlight: true });
     }
 
     function changeActiveRound() {
@@ -253,7 +253,7 @@ export default function Admin() {
             countdownRef.current.remove();
         }
 
-        addLog(`Nieuwe ronde gestart: rang ${newRank + 1}, ronde ${newRound}`, true);
+        addLog(`Nieuwe ronde gestart: rang ${newRank + 1}, ronde ${newRound}`, { highlight: true });
     }
 
     return (
