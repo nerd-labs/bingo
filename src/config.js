@@ -9,7 +9,7 @@ const level1 = {
             url: 'https://www.bol.com/nl/p/lego-creator-safari-wilde-dieren-boomhuis-31116/9300000019666264',
         },
         {
-            name: 'Ticket Bobbejaanland',
+            name: 'Ticket Bobbejaanland (1p)',
             url: 'https://www.bobbejaanland.be/plan-je-bezoek/tickets',
         },
         {
