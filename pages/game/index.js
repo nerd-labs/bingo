@@ -56,6 +56,7 @@ export default function Home() {
         }, { capture: true });
 
         window.addEventListener('unload', (event) => {
+            localStorage.removeItem('bingo.euri.com');
             usersRef.current.child(userId).remove();
 
             return;
