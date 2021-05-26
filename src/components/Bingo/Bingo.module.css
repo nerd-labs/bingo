@@ -9,7 +9,7 @@
     );
     border-radius: 0 0 20px 20px;
     box-shadow: 0 10px 0 0 rgba(0, 0, 0, 0.3);
-    color: rgba(255, 255, 255, .7);
+    color: #f5e3e3;
     display: inline-block;
     font-size: 270px;
     font-weight: 900;
@@ -151,7 +151,7 @@
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1240px) {
     .bingo {
         line-height: normal;
         width: 600px !important;

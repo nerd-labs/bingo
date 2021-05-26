@@ -47,7 +47,7 @@
     opacity: 1;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1240px) {
     .shape {
         height: 60px;
         width: 60px;
