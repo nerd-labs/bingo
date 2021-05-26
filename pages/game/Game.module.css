@@ -189,4 +189,8 @@
     .extraPrice {
         margin-bottom: 40px;
     }
+
+    .grid {
+        --square-size: 120px;
+    }
 }

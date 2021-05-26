@@ -9,7 +9,7 @@ const level1 = {
             url: 'https://www.bol.com/nl/p/lego-creator-safari-wilde-dieren-boomhuis-31116/9300000019666264',
         },
         {
-            name: 'Ticket Bobbejaanland',
+            name: 'Ticket Bobbejaan land',
             url: 'https://www.bobbejaanland.be/plan-je-bezoek/tickets',
         },
         {
@@ -45,7 +45,7 @@ const level1 = {
             url: 'https://webshoppairidaiza.recreatex.be/Exhibitions/Overview',
         },
         {
-            name: 'Broodbakmachine',
+            name: 'Broodbak machine',
             url: 'https://www.bol.com/nl/p/inventum-bm55-broodbakmachine/9200000025955257',
         },
         {
@@ -289,7 +289,7 @@ const superJackpot = {
             url: 'https://www.decathlon.be/nl/p/kampeertent-5-personen-air-seconds-5-2-f-b-opblaasbaar-2-slaapcompartimenten/_/R-p-324972?mc=8584565',
         },
         {
-            name: 'Elektr -ische step',
+            name: 'E-step',
             big: true,
             url: 'https://www.mediamarkt.nl/nl/product/_pro-mounts-urbmob-f9-1670674.html',
         },

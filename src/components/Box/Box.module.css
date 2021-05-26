@@ -7,7 +7,7 @@
   border-radius: 20px;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
   color: var(--color-white);
-  font-size: 18px;
+  font-size: 17px;
   height: var(--square-size);
   line-height: 1;
   padding: 4px;
@@ -66,4 +66,20 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@media (max-width: 1293px) {
+    .outer {
+        font-size: 16px;
+    }
+
+    .bigText {
+        font-size: 20px;
+    }
+}
+
+@media (max-wdth: 767px) {
+    .outer {
+        font-size: 17px;
+    }
 }
