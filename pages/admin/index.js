@@ -55,7 +55,6 @@ export default function Admin() {
     }
 
     useEffect(() => {
-        console.log('new logs', logs);
         if (logs.length && logs[0].sound) {
             playSound();
         }
