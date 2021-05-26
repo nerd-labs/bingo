@@ -152,7 +152,7 @@
     .balls {
         margin-top: 30px;
     }
-
+    
     .grid {
         --square-size: 110px;
     }
@@ -188,5 +188,9 @@
 
     .extraPrice {
         margin-bottom: 40px;
+    }
+
+    .grid {
+        --square-size: 120px;
     }
 }

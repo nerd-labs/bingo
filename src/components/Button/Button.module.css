@@ -13,8 +13,7 @@
     font-family: inherit;
     font-size: calc(var(--size) * .6);
     height: var(--size);
-    line-height: calc(var(--size) + (var(--size) / 10));
-    padding: 0 var(--size);
+    /* padding: 0 var(--size); */
     position: relative;
     text-align: center;
     text-shadow: 0 0 4px rgba(0, 0, 0, .5);
