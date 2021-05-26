@@ -152,6 +152,10 @@
     .balls {
         margin-top: 30px;
     }
+    
+    .grid {
+        --square-size: 110px;
+    }
 }
 
 @media (max-width: 767px) {
