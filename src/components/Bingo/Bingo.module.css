@@ -151,7 +151,7 @@
     }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1240px) {
     .bingo {
         line-height: normal;
         width: 600px !important;
