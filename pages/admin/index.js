@@ -6,6 +6,7 @@ import Shape, { SHAPES } from '../../src/components/Shape';
 import { firebase } from '../../src/initFirebase';
 import useConfig from '../../src/hooks/useConfig';
 import useLogs from '../../src/hooks/useLogs';
+import useSound from '../../src/hooks/useSound';
 
 import styles from './Admin.module.css'
 
@@ -25,6 +26,7 @@ export default function Admin() {
 
     const config = useConfig();
     const [logs, addLog] = useLogs();
+    const [playSound] = useSound('./deurbel.wav');
 
     const ranksRef = useRef(db.ref('ranks'));
     const usersRef = useRef(db.ref('users'));
@@ -51,6 +53,13 @@ export default function Admin() {
 
         return [time, toDigits(date.getMilliseconds(), 3)].join('.');
     }
+
+    useEffect(() => {
+        console.log('new logs', logs);
+        if (logs.length && logs[0].sound) {
+            playSound();
+        }
+    }, [logs]);
 
     useEffect(() => {
         ranksRef.current.on('value', (snapshot) => {

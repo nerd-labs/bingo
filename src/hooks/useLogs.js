@@ -8,7 +8,6 @@ const db = firebase.database();
 
 export default function useConfig() {
     const [logs, setLogs] = useState([]);
-    const [playSound] = useSound('./deurbel.wav');
 
     const logsRef = useRef(db.ref('logs'));
 
@@ -30,10 +29,6 @@ export default function useConfig() {
             if (value) {
                 const reversedLogs = Object.values(value).reverse();
                 setLogs(reversedLogs);
-
-                if (reversedLogs[0].sound) {
-                    playSound();
-                }
             }
         });
 
