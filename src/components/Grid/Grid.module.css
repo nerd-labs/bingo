@@ -50,7 +50,7 @@
     text-shadow: 0 0 4px rgba(0, 0, 0, .5);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .gridInner {
         height: auto;
         padding: 40px 10px 10px;

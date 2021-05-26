@@ -125,7 +125,7 @@
     z-index: 100;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
     .page {
         justify-content: center;
         grid-gap: 20px;
