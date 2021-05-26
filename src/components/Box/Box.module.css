@@ -7,7 +7,7 @@
   border-radius: 20px;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
   color: var(--color-white);
-  font-size: 20px;
+  font-size: 18px;
   height: var(--square-size);
   line-height: 1;
   padding: 4px;
@@ -67,4 +67,3 @@
     transform: scale(1);
   }
 }
-
