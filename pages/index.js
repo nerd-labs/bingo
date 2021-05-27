@@ -102,7 +102,7 @@ function Welcome() {
             <img src="/logo.png" className={styles.logoImage} alt="logo" />
 
             <div className={styles.content}>
-                { isLoading && <h1 className={styles.loading}>Spel aan het laden....</h1> }
+                { isLoading && <h1 className={styles.loading}>Spel aan het laden...</h1> }
 
                 { !!user && !isLoading && (
                     <div className={styles.noActiveGame}>

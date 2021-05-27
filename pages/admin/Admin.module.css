@@ -71,6 +71,7 @@
     font-family: monospace;
     margin: 10px;
     padding: 10px;
+    text-transform: none;
 }
 
 .line {

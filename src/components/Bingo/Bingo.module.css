@@ -1,4 +1,6 @@
 .bingo {
+    --height: 330px;
+
     animation: slide 300ms linear both;
     background-image: linear-gradient(
         var(--color-purple),
@@ -7,11 +9,12 @@
     );
     border-radius: 0 0 20px 20px;
     box-shadow: 0 10px 0 0 rgba(0, 0, 0, 0.3);
-    color: rgba(255, 255, 255, .7);
+    color: #f5e3e3;
     display: inline-block;
-    font-size: 300px;
+    font-size: 270px;
     font-weight: 900;
     left: 50%;
+    line-height: var(--height);
     padding: 8px;
     position: fixed;
     text-align: center;
@@ -21,18 +24,19 @@
 }
 
 .secondary {
+    --height: 280px;
+
     background-image: linear-gradient(
         green,
         lightgreen,
         green
     );
-    font-size: 200px;
+    font-size: 190px;
 }
 
 .secondary .bingoInner {
     background-image: radial-gradient(lightgreen, green);
     border-bottom: 1px solid lightgreen;
-    height: 280px;
     width: 800px;
 }
 
@@ -45,8 +49,8 @@
     border-bottom: 1px solid var(--color-pink);
     border-radius: 0 0 20px 20px;
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
-    height: 330px;
-    padding: 60px 30px;
+    height: var(--height);
+    padding: 0 30px;
     position: relative;
     width: 1000px;
 }
@@ -147,9 +151,10 @@
     }
 }
 
-@media (max-width: 1239px) {
+@media (max-width: 1240px) {
     .bingo {
-        width: 100% !important;
+        line-height: normal;
+        width: 600px !important;
     }
 
     .bingoInner {
@@ -161,6 +166,10 @@
 }
 
 @media (max-width: 767px) {
+    .bingo {
+        width: 100% !important;
+    }
+
     .bingoInner {
         font-size: 70px;
     }

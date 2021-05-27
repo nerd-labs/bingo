@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
 
 :root {
     --square-size: 120px;
@@ -12,14 +12,17 @@
 
     --color-purple: rebeccapurple;
     --color-pink: pink;
+
+    --font-family: 'Carter One', cursive;
 }
 
 html,
 body {
-    font-family: 'Luckiest Guy', cursive;
+    font-family: var(--font-family);
     min-height: 100%;
     margin: 0;
     padding: 0;
+    text-transform: uppercase;
 }
 
 a {
@@ -28,7 +31,11 @@ a {
 }
 
 input {
-    font-family: 'Luckiest Guy', cursive;
+    font-family: var(--font-family);
+}
+
+button {
+    text-transform: uppercase;
 }
 
 * {

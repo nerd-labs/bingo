@@ -125,7 +125,7 @@
     z-index: 100;
 }
 
-@media (max-width: 1293px) {
+@media (max-width: 1240px) {
     .page {
         justify-content: center;
         grid-gap: 20px;
@@ -152,7 +152,7 @@
     .balls {
         margin-top: 30px;
     }
-
+    
     .grid {
         --square-size: 110px;
     }
@@ -188,5 +188,9 @@
 
     .extraPrice {
         margin-bottom: 40px;
+    }
+
+    .grid {
+        --square-size: 120px;
     }
 }
